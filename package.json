@@ -1,6 +1,6 @@
 {
   "name": "imgx",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "react image process",
   "main": "./dist/imgx.min.js",
   "scripts": {
@@ -11,10 +11,24 @@
     "email": "wsd312@163.com",
     "url": "https://shudong.wang"
   },
+  "keywords": [
+    "react-img",
+    "react-loading",
+    "loading",
+    "react",
+    "parsing",
+    "cli",
+    "command"
+  ],
   "files": [
     "dist"
   ],
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wsdo/imgx.git"
+  },
+  "homepage": "https://github.com/wsdo/imgx",
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-export-extensions": "^6.22.0",

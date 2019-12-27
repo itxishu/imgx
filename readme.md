@@ -1,3 +1,18 @@
+<h1 align="center"> Yargs </h1>
+<p align="center">
+  <b >图片渐进加载</b>
+</p>
+
+<br>
+
+[![Build Status][travis-image]][travis-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
+[![NPM version][npm-image]][npm-url]
+[![js-standard-style][standard-image]][standard-url]
+[![Conventional Commits][conventional-commits-image]][conventional-commits-url]
+[![Slack][slack-image]][slack-url]
+
+
 ## intro
 > 让图片渐进的加载
 
