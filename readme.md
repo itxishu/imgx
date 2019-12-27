@@ -1,5 +1,5 @@
 ## intro
-> just qiniu img url
+> 让图片渐进的加载
 
 ## how to use?
 

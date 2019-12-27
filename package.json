@@ -1,7 +1,7 @@
 {
   "name": "imgx",
-  "version": "1.0.3",
-  "description": "react qiniu image process",
+  "version": "1.0.4",
+  "description": "react image process",
   "main": "./dist/imgx.min.js",
   "scripts": {
     "build": "webpack --production"
