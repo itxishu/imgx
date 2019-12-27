@@ -1,0 +1,39 @@
+{
+  "name": "imgx",
+  "version": "1.0.3",
+  "description": "react qiniu image process",
+  "main": "./dist/imgx.min.js",
+  "scripts": {
+    "build": "webpack --production"
+  },
+  "author": {
+    "name": "starkwang",
+    "email": "wsd312@163.com",
+    "url": "https://shudong.wang"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "webpack": "^4.41.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "babel-preset-react": "^6.24.1",
+    "jsx-loader": "^0.13.2",
+    "raw-loader": "^4.0.0",
+    "webpack-cli": "^3.3.10"
+  }
+}
