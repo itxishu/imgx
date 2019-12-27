@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 const pattern = new RegExp("http(s)?://[^s]*");
-const defaultImg = "https://img.kaikeba.com/94526172219102ksjg.jpeg";
+const defaultImg = "https://img.kaikeba.com/22857172219102bybu.jpeg";
 class ImgLoad extends Component {
   state = {
     loaded: false
