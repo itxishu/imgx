@@ -24,5 +24,5 @@ export default ImgLoad;
 ImgLoad.propTypes = { imageProcess: PropTypes.string };
 ImgLoad.defaultProps = {
   imageProcess:
-    "?imageMogr2/thumbnail/30x30/format/webp/blur/1x0/quality/75|imageslim"
+  "?imageMogr2/thumbnail/20x20/blur/1x0/quality/75|imageslim"
 };

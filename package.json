@@ -1,6 +1,6 @@
 {
   "name": "imgx",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "react image process",
   "main": "./dist/imgx.min.js",
   "scripts": {
