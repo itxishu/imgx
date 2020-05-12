@@ -5,18 +5,18 @@ const defaultImg = "https://img.kaikeba.com/22857172219102bybu.jpeg";
 class ImgLoad extends Component {
   state = {
     loaded: false,
-    withNum: "100%",
+    widthNum: "100%",
   };
   onLoad = () => {
     this.setState({ loaded: true });
   };
   render() {
-    let { src, imageProcess, pwith, ...props } = this.props;
-    const { loaded, withNum } = this.state;
-    const num = pwith || withNum;
+    let { src, imageProcess, width, ...props } = this.props;
+    const { loaded, widthNum } = this.state;
+    const num = width || widthNum;
     const curSrc = pattern.test(src) ? src : defaultImg;
     src = loaded ? `${src}` : `${curSrc}${imageProcess}`;
-    return <img src={src} with={num} onLoad={this.onLoad} {...props} />;
+    return <img src={src} width={num} onLoad={this.onLoad} {...props} />;
   }
 }
 
