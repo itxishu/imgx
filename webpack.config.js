@@ -1,14 +1,15 @@
 const { resolve } = require('path');
 
 module.exports = {
-    mode: 'production',
+  mode: 'production',
   entry: './src/index.js',
   output: {
     filename: 'imgx.min.js',
     path: resolve(__dirname, './dist'),
     publicPath: '/',
-    libraryTarget: 'umd',
-    library: 'Imgx',
+    libraryTarget: 'commonjs',
+    // libraryTarget: 'umd',
+    // library: 'Imgx',
   },
   node: false,
   devtool: 'source-map',
@@ -26,3 +27,4 @@ module.exports = {
     }],
   },
 };
+ 
