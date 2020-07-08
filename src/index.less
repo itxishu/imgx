@@ -1,0 +1,23 @@
+@blurNum: 20px; // 模糊效果
+
+.blurImg {
+  width: 100%;
+  filter: blur(@blurNum);
+}
+
+.blurImgAni {
+  width: 100%;
+  filter: blur(@blurNum);
+  animation: aniblur 0.9s ease 1;
+  animation-fill-mode: both;
+}
+
+@keyframes aniblur {
+  form {
+    filter: blur(@blurNum);
+  }
+
+  to {
+    filter: blur(0px);
+  }
+}

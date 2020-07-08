@@ -16,7 +16,7 @@
 ## how to use?
 
 ```
-import Imgx from 'imgx'
+import { Imgx } from 'imgx'
 
 <Imgx src="https://n1-q.mafengwo.net/s15/M00/52/1F/CoUBGV4DS8iAYKvfACPhDULBto4374.png" />
 ```
