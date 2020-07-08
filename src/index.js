@@ -23,11 +23,14 @@ class Imgx extends Component {
     const curSrc = pattern.test(src) ? src : defaultImg;
     const num = width || widthNum;
     src = loaded ? `${src}` : `${curSrc}${imageProcess}`;
-
     return (
-      <div className={this.state.imgStyle}>
-        <img src={src} width={num} onLoad={this.onLoad} {...props} />
-      </div>
+      <img
+        src={src}
+        width={num}
+        onLoad={this.onLoad}
+        {...props}
+        className={`${props.className || ''} ${this.state.imgStyle}`}
+      />
     );
   }
 }

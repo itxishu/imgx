@@ -1,14 +1,17 @@
 @blurNum: 20px; // 模糊效果
 
-.blurImg {
+.baseImg() {
   width: 100%;
   filter: blur(@blurNum);
 }
 
+.blurImg {
+  .baseImg();
+}
+
 .blurImgAni {
-  width: 100%;
-  filter: blur(@blurNum);
-  animation: aniblur 0.9s ease 1;
+  .baseImg();
+  animation: aniblur 1.6s ease 1;
   animation-fill-mode: both;
 }
 
