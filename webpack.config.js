@@ -1,46 +1,66 @@
 const { resolve } = require('path');
-
-const getCssLoader = () => {
-  return {
-    loader: 'css-loader',
-    options: {
-      sourceMap: false,
-      modules: true,
-    },
-  };
-};
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.js',
+  entry: './src/index',
   output: {
     filename: 'imgx.min.js',
     path: resolve(__dirname, './dist'),
     publicPath: '/',
-    libraryTarget: 'commonjs',
-    // libraryTarget: 'umd',
-    // library: 'Imgx',
+    libraryTarget: 'commonjs2',
   },
-  node: false,
+  target: 'node',
   devtool: 'source-map',
   resolve: {
-    extensions: ['*', '.js', '.jsx', '.json'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
   },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(jsx|js|ts|tsx)?$/,
         use: 'babel-loader',
         exclude: /node_modules/,
       },
       {
-        test: /\.(css|less)$/,
-        use: ['style-loader', getCssLoader(), 'postcss-loader', 'less-loader'],
-      },
-      {
-        test: /\.svg$/,
-        use: 'raw-loader',
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+        exclude: /node_modules/,
       },
     ],
+  },
+  plugins: [new CleanWebpackPlugin()],
+  optimization: {
+    sideEffects: true,
+    concatenateModules: true,
+    minimize: true,
+    minimizer: [
+      // 压缩js
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+        extractComments: false,
+        terserOptions: {
+          warnings: false,
+          compress: {
+            comparisons: false,
+          },
+          parse: {},
+          mangle: true,
+          output: {
+            comments: false,
+            ascii_only: true,
+          },
+        },
+        parallel: true, // 多线程
+        sourceMap: false,
+      }),
+    ],
+  },
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+    'prop-types': 'prop-types',
   },
 };
