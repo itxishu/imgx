@@ -1,6 +1,6 @@
 {
   "name": "imgx",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "react image process",
   "main": "./dist/imgx.min.js",
   "scripts": {
@@ -23,7 +23,8 @@
     "command"
   ],
   "files": [
-    "dist"
+    "dist",
+    "src/css"
   ],
   "license": "ISC",
   "repository": {

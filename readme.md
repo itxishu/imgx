@@ -14,17 +14,44 @@
 
 
 ## how to use?
+**style.css**
 
-```
-import { Imgx } from 'imgx'
+```css
+:global(.imglazy-load-wrap) {
+  width: 100%;
+  /* position: relative;
+  display: inline-block;
+  overflow: hidden; */
+}
 
-<Imgx src="https://n1-q.mafengwo.net/s15/M00/52/1F/CoUBGV4DS8iAYKvfACPhDULBto4374.png" />
+:global(.imglazy-load-image-init) {
+  width: 100%;
+  filter: blur(20px);
+}
+
+:global(.imglazy-load-image-loaded) {
+  width: 100%;
+  filter: blur(20px);
+  animation: imgLazyAniblur 2.6s ease 1;
+  animation-fill-mode: both;
+}
+
+/* :global() */
+@keyframes imgLazyAniblur {
+  form {
+    filter: blur(20px);
+  }
+  to {
+    filter: blur(0px);
+  }
+}
+
 ```
 
 ```javascript
 import React from 'react';
 import { Imgx } from 'imgx';
-
+import 'imgx/src/css/blur.css'
 const DemoPage = (props) => (
   <div>
     <Imgx
