@@ -50,6 +50,7 @@ class Imgx extends Component {
       beforeLoad,
       ...imgProps
     } = this.props;
+    const { loaded } = this.state;
 
     return <img onLoad={this.onLoad} {...imgProps} />;
   };
@@ -70,7 +71,7 @@ class Imgx extends Component {
           display: 'inline-block',
           height: height,
           width: width,
-          animationDuration: `${delayTime}s`,
+          animationDuration: `${delayTime || 2.6}s`,
         }}
         {...wrapperProps}
       >

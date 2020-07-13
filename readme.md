@@ -25,13 +25,12 @@ import { Imgx } from 'imgx'
 import React from 'react';
 import { Imgx } from 'imgx';
 
-const DemoPage = ({ images, scrollPosition }) => (
+const DemoPage = (props) => (
   <div>
     <Imgx
-      src={image.src} // 图片地定
-      alt={image.alt}
-      height={image.height}
-      width={image.width}
+      src={"https://n1-q.mafengwo.net/s15/M00/52/1F/CoUBGV4DS8iAYKvfACPhDULBto4374.png"} // 图片地定
+      height={'200px'}
+      width={500}
       className={'cssName'} // img图片样式
       wrapperClassName={'wrapCssName'} // 外层样式定义
       delayTime={3} // 动画持续时间
