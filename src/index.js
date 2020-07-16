@@ -9,6 +9,7 @@ class Imgx extends Component {
     super(props);
     this.state = {
       loaded: false,
+      loadedClassName: 'imglazy-load-image-init',
     };
   }
 
@@ -22,6 +23,7 @@ class Imgx extends Component {
     const { beforeLoad } = this.props;
     this.setState({
       loaded: true,
+      loadedClassName: 'imglazy-load-image-loaded',
     });
     beforeLoad && beforeLoad(); // 回调
   };
@@ -37,6 +39,14 @@ class Imgx extends Component {
       custom: placeholderSrc, // 用户自定义
     };
     return newImgType[imageLoadType] || '';
+  };
+
+  handleImgUrl = (url) => {
+    let str = 'https://img.kaikeba.com/platform/321141700202wtqc.jpg?imageView2/2/w/330';
+    console.log(/\?imageView2/.test(str));
+    // const reg = str.match(/(?<newUrl>.*)\?.*/);
+
+    // console.log(reg.groups.newUrl);
   };
 
   // 图片组件
@@ -57,9 +67,7 @@ class Imgx extends Component {
 
   getWrappedLazyLoadImage(lazyLoadImage) {
     const { height, width, wrapperClassName, wrapperProps, delayTime } = this.props;
-    const { loaded } = this.state;
-
-    const loadedClassName = loaded ? 'imglazy-load-image-loaded' : 'imglazy-load-image-init';
+    const { loaded, loadedClassName } = this.state;
 
     return (
       <span
