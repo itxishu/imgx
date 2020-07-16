@@ -58,9 +58,9 @@ module.exports = {
       }),
     ],
   },
-  externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM',
-    'prop-types': 'prop-types',
-  },
+  // externals: {
+  //   react: 'React',
+  //   'react-dom': 'ReactDOM',
+  //   'prop-types': 'prop-types',
+  // },
 };

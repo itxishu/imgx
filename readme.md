@@ -25,7 +25,7 @@ import { Imgx } from 'imgx'
 import React from 'react';
 import { Imgx } from 'imgx';
 
-const DemoPage = (props) => (
+const DemoPage = ({ images, }) => (
   <div>
     <Imgx
       src={"https://n1-q.mafengwo.net/s15/M00/52/1F/CoUBGV4DS8iAYKvfACPhDULBto4374.png"} // 图片地定
