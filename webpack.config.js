@@ -9,7 +9,7 @@ module.exports = {
     filename: 'imgx.min.js',
     path: resolve(__dirname, './dist'),
     publicPath: '/',
-    libraryTarget: 'commonjs2',
+    libraryTarget: 'commonjs',
   },
   target: 'node',
   devtool: 'source-map',
@@ -58,9 +58,11 @@ module.exports = {
       }),
     ],
   },
-  // externals: {
-  //   react: 'React',
-  //   'react-dom': 'ReactDOM',
-  //   'prop-types': 'prop-types',
-  // },
+  externals: {
+    react: 'commonjs react',
+    'react-dom': 'commonjs react-dom',
+    // react: 'React',
+    // 'react-dom': 'ReactDOM',
+    // 'prop-types': 'prop-types',
+  },
 };

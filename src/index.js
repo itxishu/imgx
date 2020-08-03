@@ -1,40 +1,61 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+// import './css/blur.css';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
+
+const imglazyLoadInit = {
+  width: '100%',
+  filter: 'blur(20px)',
+  color: 'transparent',
+  display: 'inline-block',
+};
+const imglazyLoadLoaded = {
+  ...imglazyLoadInit,
+  filter: 'blur(0px)',
+  transition: 'filter ease 1',
+  animationFillMode: 'both',
+};
 
 class Imgx extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loaded: false,
-      loadedClassName: 'imglazy-load-image-init',
+      loadedClassName: imglazyLoadInit,
     };
   }
 
   static defaultProps = {
     imageLoadType: 'qiniu',
     delayTime: 1.6,
+    isHttps: true,
   };
 
   // 图片加载完
   onLoad = () => {
-    const { beforeLoad } = this.props;
+    const { beforeLoad, delayTime } = this.props;
     this.setState({
       loaded: true,
-      loadedClassName: 'imglazy-load-image-loaded',
+      loadedClassName: {
+        transitionDuration: `${delayTime || 2.6}s`,
+        ...imglazyLoadLoaded,
+      },
     });
     beforeLoad && beforeLoad(); // 回调
   };
 
   // 占位符图片url
   handleLoadImg = () => {
-    const { imageLoadType, src, placeholderSrc } = this.props;
-    const curSrc = pattern.test(src) ? src : defaultImg;
+    const { imageLoadType, src, placeholderSrc, isHttps } = this.props;
+    let curSrc = src;
+    if (isHttps) {
+      curSrc = pattern.test(src) ? this.handleImgUrl(src) : defaultImg;
+    }
     // 占位低清晰图支持类型
     const newImgType = {
-      qiniu: `${curSrc}?imageMogr2/thumbnail/200x200/blur/1x0/quality/15|imageslim`,
+      qiniu: `${curSrc}?imageMogr2/thumbnail/100x100/blur/1x0/quality/15|imageslim`,
       oss: '',
       custom: placeholderSrc, // 用户自定义
     };
@@ -42,11 +63,13 @@ class Imgx extends Component {
   };
 
   handleImgUrl = (url) => {
-    let str = 'https://img.kaikeba.com/platform/321141700202wtqc.jpg?imageView2/2/w/330';
-    console.log(/\?imageView2/.test(str));
-    // const reg = str.match(/(?<newUrl>.*)\?.*/);
-
-    // console.log(reg.groups.newUrl);
+    let newUrlStr = url;
+    // qiniu处理
+    if (/\?imageView2\//.test(newUrlStr)) {
+      const reg = newUrlStr.match(/(?<u>.*)\?.*/);
+      newUrlStr = reg?.groups?.u || newUrlStr;
+    }
+    return newUrlStr || '';
   };
 
   // 图片组件
@@ -58,6 +81,7 @@ class Imgx extends Component {
       wrapperProps,
       imageLoadType,
       beforeLoad,
+      isHttps,
       ...imgProps
     } = this.props;
     const { loaded } = this.state;
@@ -71,15 +95,14 @@ class Imgx extends Component {
 
     return (
       <span
-        className={`imglazy-load-wrap ${loadedClassName} ${wrapperClassName || ''}`}
+        className={`imglazy-load-wrap ${wrapperClassName || ''}`}
         style={{
           backgroundImage: loaded ? `` : `url(${this.handleLoadImg()})`,
           backgroundSize: loaded ? '' : '100% 100%',
-          color: 'transparent',
-          display: 'inline-block',
           height: height,
           width: width,
-          animationDuration: `${delayTime || 2.6}s`,
+
+          ...loadedClassName,
         }}
         {...wrapperProps}
       >
@@ -102,6 +125,7 @@ Imgx.propTypes = {
   delayTime: PropTypes.number, // 动画持续时间
   src: PropTypes.string.isRequired,
   beforeLoad: PropTypes.func, // 加载后回调
+  isHttps: PropTypes.bool, // 图片是否必须https
 };
 
 export default Imgx;

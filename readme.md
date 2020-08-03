@@ -14,39 +14,6 @@
 
 
 ## how to use?
-**style.css**
-
-```css
-:global(.imglazy-load-wrap) {
-  width: 100%;
-  /* position: relative;
-  display: inline-block;
-  overflow: hidden; */
-}
-
-:global(.imglazy-load-image-init) {
-  width: 100%;
-  filter: blur(20px);
-}
-
-:global(.imglazy-load-image-loaded) {
-  width: 100%;
-  filter: blur(20px);
-  animation: imgLazyAniblur 2.6s ease 1;
-  animation-fill-mode: both;
-}
-
-/* :global() */
-@keyframes imgLazyAniblur {
-  form {
-    filter: blur(20px);
-  }
-  to {
-    filter: blur(0px);
-  }
-}
-
-```
 
 ```javascript
 import React from 'react';
@@ -63,6 +30,7 @@ const DemoPage = ({ images, }) => (
       delayTime={3} // 动画持续时间
       imageLoadType={"custom"} // 低清图类型，使用自定义，默认七牛
       placeholderSrc={"https://img95.699pic.com/photo/50055/5642.jpg_wh300.jpg"} // 低清图url，只有开启自定义模式才生效
+      isHttps={true} // 图片是否必须https，默认true
     />
   </div>
 );
