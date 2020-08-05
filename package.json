@@ -1,10 +1,12 @@
 {
   "name": "imgx",
-  "version": "1.0.15",
+  "version": "1.0.21",
   "description": "react image process",
   "main": "./dist/imgx.min.js",
   "scripts": {
-    "build": "webpack --production"
+    "dev": "webpack --watch --mode development",
+    "prepublish": "webpack --mode production",
+    "build": "webpack --mode production"
   },
   "author": {
     "name": "starkwang",
@@ -21,7 +23,8 @@
     "command"
   ],
   "files": [
-    "dist"
+    "dist",
+    "src/css"
   ],
   "license": "ISC",
   "repository": {
@@ -29,32 +32,35 @@
     "url": "https://github.com/rdmix/imgx.git"
   },
   "homepage": "https://shudong.wang",
+  "peerDependencies": {
+    "react-dom": "^15.x.x || ^16.x.x"
+  },
   "dependencies": {
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-export-extensions": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "webpack": "^4.41.4"
+    "react": "^16.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.10.4",
     "@babel/preset-env": "^7.7.7",
-    "@babel/preset-react": "^7.7.4",
+    "@babel/preset-react": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
     "babel-loader": "^8.0.6",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.6.0",
-    "jsx-loader": "^0.13.2",
-    "less": "^3.11.3",
-    "less-loader": "^6.2.0",
+    "import-local": "^3.0.2",
+    "mini-css-extract-plugin": "^0.9.0",
     "postcss-flexbugs-fixes": "^4.2.1",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
-    "raw-loader": "^4.0.0",
+    "prop-types": "^15.7.2",
     "style-loader": "^1.2.1",
-    "webpack-cli": "^3.3.10"
+    "terser-webpack-plugin": "^3.0.6",
+    "webpack": "5.0.0-beta.22",
+    "webpack-cli": "^3.3.12"
   }
 }

@@ -1,0 +1,24 @@
+.imglazy-load-wrap {
+  width: 100%;
+}
+
+.imglazy-load-image-init {
+  width: 100%;
+  filter: blur(20px);
+}
+
+.imglazy-load-image-loaded {
+  width: 100%;
+  filter: blur(20px);
+  animation: imgLazyAniblur 2.6s ease 1;
+  animation-fill-mode: both;
+}
+
+@keyframes imgLazyAniblur {
+  form {
+    filter: blur(20px);
+  }
+  to {
+    filter: blur(0px);
+  }
+}
