@@ -94,7 +94,7 @@ class Imgx extends Component {
     const { loaded, loadedClassName } = this.state;
 
     return (
-      <div
+      <span
         className={`imglazy-load-wrap ${wrapperClassName || ''}`}
         style={{
           backgroundImage: loaded ? `` : `url(${this.handleLoadImg()})`,
@@ -107,7 +107,7 @@ class Imgx extends Component {
         {...wrapperProps}
       >
         {lazyLoadImage}
-      </div>
+      </span>
     );
   }
 
