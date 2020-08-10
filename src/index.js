@@ -29,7 +29,7 @@ class Imgx extends Component {
 
   static defaultProps = {
     imageLoadType: 'qiniu',
-    delayTime: 1.6,
+    delayTime: 0.6,
     isHttps: true,
   };
 
@@ -39,7 +39,7 @@ class Imgx extends Component {
     this.setState({
       loaded: true,
       loadedClassName: {
-        transitionDuration: `${delayTime || 2.6}s`,
+        transitionDuration: `${delayTime || 0.6}s`,
         ...imglazyLoadLoaded,
       },
     });
