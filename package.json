@@ -1,6 +1,6 @@
 {
   "name": "@kkb/imgx",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "react image process",
   "main": "./dist/imgx.min.js",
   "scripts": {
