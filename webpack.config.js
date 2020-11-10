@@ -62,8 +62,5 @@ module.exports = {
     react: 'commonjs react',
     'react-dom': 'commonjs react-dom',
     'prop-types': 'commonjs prop-types',
-    // react: 'React',
-    // 'react-dom': 'ReactDOM',
-    // 'prop-types': 'prop-types',
   },
 };

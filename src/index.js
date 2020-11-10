@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import './css/blur.css';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
 
 const imglazyLoadInit = {
-  width: '100%',
   filter: 'blur(20px)',
-  color: 'transparent',
-  display: 'inline-block',
+  opacity: 1,
 };
 const imglazyLoadLoaded = {
-  ...imglazyLoadInit,
   filter: 'blur(0px)',
+  opacity: 0,
   transition: 'filter ease 1',
   animationFillMode: 'both',
 };
@@ -23,27 +20,45 @@ class Imgx extends Component {
     super(props);
     this.state = {
       loaded: false,
+      blurLayoutCss: {
+        zIndex: 1,
+      },
       loadedClassName: imglazyLoadInit,
     };
   }
 
   static defaultProps = {
     imageLoadType: 'qiniu',
-    delayTime: 0.6,
+    delayTime: 3.6,
     isHttps: true,
   };
+
+  componentWillUnmount() {
+    this.blurTimer = null;
+  }
 
   // 图片加载完
   onLoad = () => {
     const { beforeLoad, delayTime } = this.props;
+    const _time = delayTime ?? 0.6;
     this.setState({
       loaded: true,
       loadedClassName: {
-        transitionDuration: `${delayTime || 0.6}s`,
+        transitionDuration: `${_time}s`,
         ...imglazyLoadLoaded,
       },
     });
     beforeLoad && beforeLoad(); // 回调
+
+    // 动效remove
+    this.blurTimer = setTimeout(() => {
+      this.setState({
+        blurLayoutCss: {
+          zIndex: -1,
+          display: 'none',
+        },
+      });
+    }, _time * 1000);
   };
 
   // 占位符图片url
@@ -55,7 +70,7 @@ class Imgx extends Component {
     }
     // 占位低清晰图支持类型
     const newImgType = {
-      qiniu: `${curSrc}?imageMogr2/thumbnail/100x100/blur/1x0/quality/15|imageslim`,
+      qiniu: `${curSrc}?imageMogr2/thumbnail/100x100`,
       oss: '',
       custom: placeholderSrc, // 用户自定义
     };
@@ -64,7 +79,6 @@ class Imgx extends Component {
 
   handleImgUrl = (url) => {
     let newUrlStr = url;
-    // qiniu处理
     if (/\?imageView2\//.test(newUrlStr)) {
       const reg = newUrlStr.match(/(?<u>.*)\?.*/);
       newUrlStr = reg?.groups?.u || newUrlStr;
@@ -73,47 +87,68 @@ class Imgx extends Component {
   };
 
   // 图片组件
-  getImg = () => {
+  lazyLoadImage = () => {
     const {
       delayTime,
       placeholderSrc,
-      wrapperClassName,
       wrapperProps,
       imageLoadType,
       beforeLoad,
       isHttps,
       ...imgProps
     } = this.props;
-    const { loaded } = this.state;
-
-    return <img onLoad={this.onLoad} {...imgProps} />;
-  };
-
-  getWrappedLazyLoadImage(lazyLoadImage) {
-    const { height, width, wrapperClassName, wrapperProps, delayTime } = this.props;
-    const { loaded, loadedClassName } = this.state;
 
     return (
-      <span
-        className={`imglazy-load-wrap ${wrapperClassName || ''}`}
+      <img
+        onLoad={this.onLoad}
+        {...imgProps}
         style={{
-          backgroundImage: loaded ? `` : `url(${this.handleLoadImg()})`,
-          backgroundSize: loaded ? '' : '100% 100%',
-          height: height,
-          width: width,
-
-          ...loadedClassName,
+          display: this.state.loaded ? 'inline-block' : 'none',
+          width: '100%',
+          height: '100%',
         }}
-        {...wrapperProps}
-      >
-        {lazyLoadImage}
-      </span>
+      />
     );
-  }
+  };
 
   render() {
-    const lazyLoadImage = this.getImg();
-    return this.getWrappedLazyLoadImage(lazyLoadImage);
+    const { height, width, className, onClick } = this.props;
+    const { loadedClassName, blurLayoutCss } = this.state;
+
+    return (
+      <div
+        className={`${className || ''}`}
+        style={{
+          height: height,
+          width: width,
+          color: 'red',
+          position: 'relative',
+        }}
+        onClick={onClick}
+      >
+        {this.lazyLoadImage()}
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            backgroundColor: 'transparent',
+            ...loadedClassName,
+            ...blurLayoutCss,
+          }}
+        >
+          <img
+            src={this.handleLoadImg()}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          ></img>
+        </div>
+      </div>
+    );
   }
 }
 
