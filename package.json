@@ -1,6 +1,6 @@
 {
   "name": "@kkb/imgx",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "react image process",
   "main": "./dist/imgx.min.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "webpack --mode production"
   },
   "publishConfig": {
-    "registry": "https://registry-npm.kaikeba.com/"
+    "registry": "https://registry-npm.kaikeba.com"
   },
   "author": {
     "name": "starkwang",

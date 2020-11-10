@@ -103,7 +103,7 @@ class Imgx extends Component {
         onLoad={this.onLoad}
         {...imgProps}
         style={{
-          display: this.state.loaded ? 'inline-block' : 'none',
+          // display: this.state.loaded ? 'inline-block' : 'none',
           width: '100%',
           height: '100%',
         }}
@@ -153,13 +153,12 @@ class Imgx extends Component {
 }
 
 Imgx.propTypes = {
-  imageLoadType: PropTypes.string, // 低清晰图默认类型qiniu，类型custom 可自定义低清晰图片url
-  placeholderSrc: PropTypes.string, // 自定义占位低清晰图url
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  imageLoadType: PropTypes.string, // 低清晰图类型，custom自定义, qiniu七牛
+  placeholderSrc: PropTypes.string, // 自定义低清晰url
   delayTime: PropTypes.number, // 动画持续时间
   src: PropTypes.string.isRequired,
   beforeLoad: PropTypes.func, // 加载后回调
+  onClick: PropTypes.func,
   isHttps: PropTypes.bool, // 图片是否必须https
 };
 
