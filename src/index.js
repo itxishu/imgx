@@ -29,7 +29,7 @@ class Imgx extends Component {
 
   static defaultProps = {
     imageLoadType: 'qiniu',
-    delayTime: 3.6,
+    delayTime: 0.6,
     isHttps: true,
   };
 
