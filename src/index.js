@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { isSupportWebp } from './utils';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
@@ -24,14 +24,27 @@ class Imgx extends Component {
         zIndex: 1,
       },
       loadedClassName: imglazyLoadInit,
+      imgUrl: '',
+      imgDom: null,
     };
   }
 
   static defaultProps = {
-    imageLoadType: 'qiniu',
-    delayTime: 0.6,
-    isHttps: true,
+    src: '', // 图片url
+    delayTime: 0.6, // 动画持续时间
+    isHttps: true, // 图片是否必须https
+    imageLoadType: 'qiniu', // 低清晰图类型，默认qiniu七牛
+    placeholderSrc: '', // 自定义低清晰url
+    // beforeLoad: () => {} // 加载后回调
+    // onClick: () => {} // 点击事件
   };
+
+  componentDidMount() {
+    this.setState({
+      imgUrl: this.handleLoadImg(), // 缩略小图
+      imgDom: this.lazyLoadImage(),
+    });
+  }
 
   componentWillUnmount() {
     this.blurTimer = null;
@@ -70,16 +83,17 @@ class Imgx extends Component {
     }
     // 占位低清晰图支持类型
     const newImgType = {
-      qiniu: `${curSrc}?imageMogr2/thumbnail/100x100`,
+      qiniu: `${curSrc}?imageMogr2/thumbnail/10x10`,
       oss: '',
       custom: placeholderSrc, // 用户自定义
     };
     return newImgType[imageLoadType] || '';
   };
 
+  // 过滤参数
   handleImgUrl = (url) => {
     let newUrlStr = url;
-    if (/\?imageView2\//.test(newUrlStr)) {
+    if (/\?(imageView2|imageMogr2)\//.test(newUrlStr)) {
       const reg = newUrlStr.match(/(?<u>.*)\?.*/);
       newUrlStr = reg?.groups?.u || newUrlStr;
     }
@@ -97,11 +111,23 @@ class Imgx extends Component {
       isHttps,
       ...imgProps
     } = this.props;
+    let newUrlStr = imgProps.src;
+    const isWebp = isSupportWebp();
+    // 兼容webp格式
+    if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && isWebp) {
+      const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
+      // 转换格式容错处理
+      if (!isUrlFormat) {
+        const tailFixStr = /\/$/g.test(newUrlStr) ? '' : '/';
+        newUrlStr += `${tailFixStr}format/webp`;
+      }
+    }
 
     return (
       <img
         onLoad={this.onLoad}
         {...imgProps}
+        src={newUrlStr}
         style={{
           // display: this.state.loaded ? 'inline-block' : 'none',
           width: '100%',
@@ -113,7 +139,7 @@ class Imgx extends Component {
 
   render() {
     const { height, width, className, onClick } = this.props;
-    const { loadedClassName, blurLayoutCss } = this.state;
+    const { loadedClassName, blurLayoutCss, imgDom } = this.state;
 
     return (
       <div
@@ -126,7 +152,7 @@ class Imgx extends Component {
         }}
         onClick={onClick}
       >
-        {this.lazyLoadImage()}
+        {imgDom}
         <div
           style={{
             width: '100%',
@@ -140,7 +166,7 @@ class Imgx extends Component {
           }}
         >
           <img
-            src={this.handleLoadImg()}
+            src={this.state.imgUrl}
             style={{
               width: '100%',
               height: '100%',
@@ -151,16 +177,6 @@ class Imgx extends Component {
     );
   }
 }
-
-Imgx.propTypes = {
-  imageLoadType: PropTypes.string, // 低清晰图类型，custom自定义, qiniu七牛
-  placeholderSrc: PropTypes.string, // 自定义低清晰url
-  delayTime: PropTypes.number, // 动画持续时间
-  src: PropTypes.string.isRequired,
-  beforeLoad: PropTypes.func, // 加载后回调
-  onClick: PropTypes.func,
-  isHttps: PropTypes.bool, // 图片是否必须https
-};
 
 export default Imgx;
 export { Imgx };
