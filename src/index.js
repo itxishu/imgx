@@ -37,6 +37,7 @@ class Imgx extends Component {
     placeholderSrc: '', // 自定义低清晰url
     // beforeLoad: () => {} // 加载后回调
     // onClick: () => {} // 点击事件
+    // errorImgUrl: "url", // 图片加载失败后，显示的图片
   };
 
   componentDidMount() {
@@ -100,6 +101,17 @@ class Imgx extends Component {
     return newUrlStr || '';
   };
 
+  addImgUrlWebp = (url, fixUrl = '') => {
+    let newUrlStr = url;
+    const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
+    // 转换格式容错处理
+    if (!isUrlFormat) {
+      const tailFixStr = /\/$/g.test(newUrlStr) ? '' : '/';
+      newUrlStr += `${fixUrl}${tailFixStr}format/webp`;
+    }
+    return newUrlStr;
+  };
+
   // 图片组件
   lazyLoadImage = () => {
     const {
@@ -113,21 +125,32 @@ class Imgx extends Component {
     } = this.props;
     let newUrlStr = imgProps.src;
     const isWebp = isSupportWebp();
+
     // 兼容webp格式
     if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && isWebp) {
-      const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
-      // 转换格式容错处理
-      if (!isUrlFormat) {
-        const tailFixStr = /\/$/g.test(newUrlStr) ? '' : '/';
-        newUrlStr += `${tailFixStr}format/webp`;
-      }
+      // const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
+      // // 转换格式容错处理
+      // if (!isUrlFormat) {
+      //   const tailFixStr = /\/$/g.test(newUrlStr) ? '' : '/';
+      //   newUrlStr += `${tailFixStr}format/webp`;
+      // }
+      newUrlStr = this.addImgUrlWebp(newUrlStr);
+    } else if (isWebp) {
+      newUrlStr = this.addImgUrlWebp(newUrlStr, '?imageMogr2');
     }
+    console.log('结果2', newUrlStr);
 
     return (
       <img
         onLoad={this.onLoad}
         {...imgProps}
         src={newUrlStr}
+        onError={(e) => {
+          if (imgProps?.errorImgUrl) {
+            e.target.onerror = null;
+            e.target.src = `${imgProps.errorImgUrl}`;
+          }
+        }}
         style={{
           // display: this.state.loaded ? 'inline-block' : 'none',
           width: '100%',

@@ -5,11 +5,12 @@
 
 <br>
 
-
 ## intro
+
 > 让图片渐进的加载
 
 ## 支持
+
 * 务必：原图cdn地址是七牛云
 
 1.0.xx 老版本内联样式
@@ -17,7 +18,7 @@
 
 ## how to use?
 
-```javascript
+``` jsx
 import React from 'react';
 import { Imgx } from '@kkb/imgx';
 
@@ -29,8 +30,10 @@ const DemoPage = ({ images }) => (
       delayTime={3.3} // 动画持续时间
       imageLoadType={"custom"} // 低清图类型，qiniu七牛、custom自定义
       // 低清图url，只有开启自定义模式才生效
-      placeholderSrc={"https://img95.699pic.com/photo/50055/5642.jpg_wh300.jpg"} 
-      isHttps={false} // 图片是否必须https，默认true
+      placeholderSrc={"https://img95.699pic.com/photo/50055/5642.jpg_wh300.jpg"}
+      beforeLoad={() => {}} // 加载后回调
+      onClick={(e) => {}} // 点击事件
+      errorImgUrl={"url"} // 图片加载失败后，显示的图片
     />
   </div>
 );
