@@ -62,7 +62,7 @@ class Imgx extends Component {
         ...imglazyLoadLoaded,
       },
     });
-    beforeLoad && beforeLoad(); // 回调
+    beforeLoad?.(); // 回调
 
     // 动效remove
     this.blurTimer = setTimeout(() => {
@@ -121,6 +121,8 @@ class Imgx extends Component {
       imageLoadType,
       beforeLoad,
       isHttps,
+      onClick,
+      onError,
       ...imgProps
     } = this.props;
     let newUrlStr = imgProps.src;
@@ -128,17 +130,10 @@ class Imgx extends Component {
 
     // 兼容webp格式
     if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && isWebp) {
-      // const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
-      // // 转换格式容错处理
-      // if (!isUrlFormat) {
-      //   const tailFixStr = /\/$/g.test(newUrlStr) ? '' : '/';
-      //   newUrlStr += `${tailFixStr}format/webp`;
-      // }
       newUrlStr = this.addImgUrlWebp(newUrlStr);
     } else if (isWebp) {
       newUrlStr = this.addImgUrlWebp(newUrlStr, '?imageMogr2');
     }
-    console.log('结果2', newUrlStr);
 
     return (
       <img
@@ -152,7 +147,6 @@ class Imgx extends Component {
           }
         }}
         style={{
-          // display: this.state.loaded ? 'inline-block' : 'none',
           width: '100%',
           height: '100%',
         }}

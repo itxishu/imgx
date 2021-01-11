@@ -28,9 +28,6 @@ const DemoPage = ({ images }) => (
       src={"https://n1-q.mafengwo.net/s15/M00/52/1F/CoUBGV4DS8iAYKvfACPhDULBto4374.png"}
       className={'cssName'}
       delayTime={3.3} // 动画持续时间
-      imageLoadType={"custom"} // 低清图类型，qiniu七牛、custom自定义
-      // 低清图url，只有开启自定义模式才生效
-      placeholderSrc={"https://img95.699pic.com/photo/50055/5642.jpg_wh300.jpg"}
       beforeLoad={() => {}} // 加载后回调
       onClick={(e) => {}} // 点击事件
       errorImgUrl={"url"} // 图片加载失败后，显示的图片
@@ -39,3 +36,16 @@ const DemoPage = ({ images }) => (
 );
 
 ```
+
+## 组件参数props介绍
+
+| 名称 | 类型 | 默认值 | 描述 |
+| :-: | :-: | :-: | :-: |
+|  delayTime   |   number  |  0.6   |   过渡动画持续时间  |
+|  src   |  String   |     |  图片地址   |
+|  imageLoadType   |   String  |  qiniu   |  低清图类型，可开启自定义模式，配合placeholderSrc使用   |
+|  placeholderSrc   |   String  |     |   低清图url地址  |
+|  beforeLoad   | Function    |     |  img加载后回调   |
+|  onClick   | Function    |     | imx点击事件    |
+|   errorImgUrl  |  String   |     |  图片加载失败后，显示的图片   |
+<!-- |     |     |     |     | -->
