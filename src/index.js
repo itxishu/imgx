@@ -123,6 +123,7 @@ class Imgx extends Component {
       isHttps,
       onClick,
       onError,
+      errorImgUrl,
       ...imgProps
     } = this.props;
     let newUrlStr = imgProps.src;
@@ -138,7 +139,6 @@ class Imgx extends Component {
     return (
       <img
         onLoad={this.onLoad}
-        {...imgProps}
         src={newUrlStr}
         onError={(e) => {
           if (imgProps?.errorImgUrl) {
@@ -146,6 +146,7 @@ class Imgx extends Component {
             e.target.src = `${imgProps.errorImgUrl}`;
           }
         }}
+        alt={imgProps?.alt || ''}
         style={{
           width: '100%',
           height: '100%',
