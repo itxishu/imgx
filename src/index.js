@@ -58,7 +58,7 @@ class Imgx extends Component {
         ...imglazyLoadLoaded,
       },
     });
-    beforeLoad?.(); // 回调
+    beforeLoad?.(this.imgRef); // 回调
 
     // 动效remove
     this.blurTimer = setTimeout(() => {
@@ -141,6 +141,7 @@ class Imgx extends Component {
         onClick={onClick}
       >
         <img
+          ref={(refs) => (this.imgRef = refs)}
           onLoad={this.onLoad}
           src={this.getLoadedImgUrl()}
           onError={(e) => {
