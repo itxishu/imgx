@@ -24,14 +24,13 @@ class Imgx extends Component {
         zIndex: 1,
       },
       loadedClassName: imglazyLoadInit,
-      imgUrl: '',
-      imgDom: null,
+      isWebp: false,
     };
   }
 
   static defaultProps = {
     src: '', // 图片url
-    delayTime: 0.6, // 动画持续时间
+    delayTime: 1, // 动画持续时间
     isHttps: true, // 图片是否必须https
     imageLoadType: 'qiniu', // 低清晰图类型，默认qiniu七牛
     placeholderSrc: '', // 自定义低清晰url
@@ -41,10 +40,7 @@ class Imgx extends Component {
   };
 
   componentDidMount() {
-    this.setState({
-      imgUrl: this.handleLoadImg(), // 缩略小图
-      imgDom: this.lazyLoadImage(),
-    });
+    this.setState({ isWebp: isSupportWebp() });
   }
 
   componentWillUnmount() {
@@ -66,6 +62,7 @@ class Imgx extends Component {
 
     // 动效remove
     this.blurTimer = setTimeout(() => {
+      clearTimeout(this.blurTimer);
       this.setState({
         blurLayoutCss: {
           zIndex: -1,
@@ -76,23 +73,23 @@ class Imgx extends Component {
   };
 
   // 占位符图片url
-  handleLoadImg = () => {
+  handlePlaceholderSrc = () => {
     const { imageLoadType, src, placeholderSrc, isHttps } = this.props;
     let curSrc = src;
     if (isHttps) {
-      curSrc = pattern.test(src) ? this.handleImgUrl(src) : defaultImg;
+      curSrc = pattern.test(src) ? this.fillerPlaceholderSrc(src) : defaultImg;
     }
     // 占位低清晰图支持类型
     const newImgType = {
-      qiniu: `${curSrc}?imageMogr2/thumbnail/10x10`,
+      qiniu: `${curSrc}?imageMogr2/thumbnail/100x100`,
       oss: '',
       custom: placeholderSrc, // 用户自定义
     };
     return newImgType[imageLoadType] || '';
   };
 
-  // 过滤参数
-  handleImgUrl = (url) => {
+  // 过滤缩略图参数
+  fillerPlaceholderSrc = (url) => {
     let newUrlStr = url;
     if (/\?(imageView2|imageMogr2)\//.test(newUrlStr)) {
       const reg = newUrlStr.match(/(?<u>.*)\?.*/);
@@ -112,22 +109,11 @@ class Imgx extends Component {
     return newUrlStr;
   };
 
-  // 图片组件
-  lazyLoadImage = () => {
-    const {
-      delayTime,
-      placeholderSrc,
-      wrapperProps,
-      imageLoadType,
-      beforeLoad,
-      isHttps,
-      onClick,
-      onError,
-      errorImgUrl,
-      ...imgProps
-    } = this.props;
-    let newUrlStr = imgProps.src;
-    const isWebp = isSupportWebp();
+  // 图片url
+  getLoadedImgUrl = () => {
+    const { src } = this.props;
+    const { isWebp } = this.state;
+    let newUrlStr = src;
 
     // 兼容webp格式
     if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && isWebp) {
@@ -136,28 +122,12 @@ class Imgx extends Component {
       newUrlStr = this.addImgUrlWebp(newUrlStr, '?imageMogr2');
     }
 
-    return (
-      <img
-        onLoad={this.onLoad}
-        src={newUrlStr}
-        onError={(e) => {
-          if (imgProps?.errorImgUrl) {
-            e.target.onerror = null;
-            e.target.src = `${imgProps.errorImgUrl}`;
-          }
-        }}
-        alt={imgProps?.alt || ''}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-      />
-    );
+    return newUrlStr;
   };
 
   render() {
-    const { height, width, className, onClick } = this.props;
-    const { loadedClassName, blurLayoutCss, imgDom } = this.state;
+    const { height, width, className, onClick, alt, errorImgUrl } = this.props;
+    const { loadedClassName, blurLayoutCss } = this.state;
 
     return (
       <div
@@ -170,7 +140,21 @@ class Imgx extends Component {
         }}
         onClick={onClick}
       >
-        {imgDom}
+        <img
+          onLoad={this.onLoad}
+          src={this.getLoadedImgUrl()}
+          onError={(e) => {
+            if (errorImgUrl) {
+              e.target.onerror = null;
+              e.target.src = `${errorImgUrl}`;
+            }
+          }}
+          alt={alt || ''}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        />
         <div
           style={{
             width: '100%',
@@ -184,7 +168,7 @@ class Imgx extends Component {
           }}
         >
           <img
-            src={this.state.imgUrl}
+            src={this.handlePlaceholderSrc()}
             style={{
               width: '100%',
               height: '100%',

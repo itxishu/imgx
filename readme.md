@@ -41,7 +41,10 @@ const DemoPage = ({ images }) => (
 
 | 名称 | 类型 | 默认值 | 描述 |
 | :-: | :-: | :-: | :-: |
-|  delayTime   |   number  |  0.6   |   过渡动画持续时间  |
+|  className    |   String  |     |   组件外层样式，必须定义宽度  |
+|  height    |   number  |     |   图片高度  |
+|  width   |   number  |     |   图片宽度  |
+|  delayTime   |   number  |  1   |   过渡动画持续时间，单位秒  |
 |  src   |  String   |     |  图片地址   |
 |  imageLoadType   |   String  |  qiniu   |  低清图类型，可开启自定义模式，配合placeholderSrc使用   |
 |  placeholderSrc   |   String  |     |   低清图url地址  |

@@ -38,7 +38,6 @@ module.exports = {
     minimizer: [
       // 压缩js
       new TerserPlugin({
-        cache: true,
         parallel: true,
         extractComments: false,
         terserOptions: {
@@ -54,7 +53,6 @@ module.exports = {
           },
         },
         parallel: true, // 多线程
-        sourceMap: false,
       }),
     ],
   },
