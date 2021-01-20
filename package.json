@@ -1,6 +1,6 @@
 {
   "name": "@kkb/demo",
-  "version": "2.0.1-bate15",
+  "version": "2.0.1-bate16",
   "description": "react image process",
   "main": "./dist/imgx.min.js",
   "scripts": {

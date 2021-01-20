@@ -22,6 +22,7 @@ const Imgx = ({
   imageLoadType = 'qiniu', // 低清晰图类型，默认qiniu七牛
   placeholderSrc = '', // 自定义低清晰url
   className,
+  wrapperClassName,
   height,
   width,
   beforeLoad, // 加载后回调
