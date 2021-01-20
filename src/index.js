@@ -31,7 +31,7 @@ class Imgx extends React.Component {
 
   static defaultProps = {
     src: '', // 图片url
-    delayTime: 1, // 动画持续时间
+    delayTime: 1.3, // 动画持续时间
     isHttps: true, // 图片是否必须https
     imageLoadType: 'qiniu', // 低清晰图类型，默认qiniu七牛
     placeholderSrc: '', // 自定义低清晰url
@@ -47,11 +47,6 @@ class Imgx extends React.Component {
 
   componentWillUnmount() {
     this.blurTimer = null;
-  }
-
-  shouldComponentUpdate(prevProps, nextState) {
-    console.log('更新', prevProps.scr);
-    return true;
   }
 
   // 图片加载完
@@ -116,8 +111,9 @@ class Imgx extends React.Component {
     return newUrlStr;
   };
 
-  loadedImg = (isWebp) => {
-    const { alt, errorImgUrl, src, imgClassName } = this.props;
+  loadedImg = () => {
+    const isWebp = isSupportWebp();
+    const { alt, errorImgUrl, src, className } = this.props;
     let newUrlStr = src;
 
     // 兼容webp格式
@@ -139,7 +135,7 @@ class Imgx extends React.Component {
           }
         }}
         alt={alt || ''}
-        className={`${imgClassName || ''}`}
+        className={`${className || ''}`}
         // style={{
         //   width: '100%',
         //   height: '100%',
@@ -149,20 +145,30 @@ class Imgx extends React.Component {
   };
 
   render() {
-    const { height, width, className, onClick } = this.props;
-    const { loadedClassName, blurLayoutCss, imgLazyedDom } = this.state;
-    const isWebp = isSupportWebp();
+    const { height, width, wrapperClassName, onClick } = this.props;
+    const { loadedClassName, blurLayoutCss } = this.state;
+
+    let wrappercss = {
+      width: '100%',
+      height: '100%',
+    };
+
+    if (wrapperClassName) {
+      wrappercss = {
+        width,
+        height,
+      };
+    }
     return (
       <div
-        className={`${className || ''}`}
+        className={`${wrapperClassName || ''}`}
         style={{
-          height: height,
-          width: width,
+          ...wrappercss,
           position: 'relative',
         }}
         onClick={onClick}
       >
-        {this.loadedImg(isWebp)}
+        {this.loadedImg()}
         <div
           style={{
             width: '100%',
