@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { isSupportWebp } from './utils';
 
 const pattern = new RegExp('http(s)?://[^s]*');
@@ -15,71 +15,65 @@ const imglazyLoadLoaded = {
   animationFillMode: 'both',
 };
 
-class Imgx extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loaded: false,
-      blurLayoutCss: {
-        zIndex: 1,
-      },
-      loadedClassName: imglazyLoadInit,
-      isWebp: false,
-      imgLazyedDom: null,
+const Imgx = ({
+  src = '', // 图片url
+  delayTime = 1, // 动画持续时间
+  isHttps = true, // 图片是否必须https
+  imageLoadType = 'qiniu', // 低清晰图类型，默认qiniu七牛
+  placeholderSrc = '', // 自定义低清晰url
+  className,
+  height,
+  width,
+  beforeLoad, // 加载后回调
+  onClick, // 点击事件
+  errorImgUrl, // 图片加载失败后，显示的图片
+  alt,
+}) => {
+  const imgRef = useRef(null);
+  let blurTimer = useRef(null);
+  // const [loaded, setLoaded] = useState(false);
+  const [blurLayoutCss, setBlurLayoutCss] = useState({
+    zIndex: 1,
+  });
+  const [loadedClassName, setLoadedClassName] = useState(imglazyLoadInit);
+  const [imgLazyedDom, setImgLazyedDom] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      blurTimer.current = null;
     };
-  }
+  }, []);
 
-  static defaultProps = {
-    src: '', // 图片url
-    delayTime: 1.3, // 动画持续时间
-    isHttps: true, // 图片是否必须https
-    imageLoadType: 'qiniu', // 低清晰图类型，默认qiniu七牛
-    placeholderSrc: '', // 自定义低清晰url
-    // beforeLoad: () => {} // 加载后回调
-    // onClick: () => {} // 点击事件
-    // errorImgUrl: "url", // 图片加载失败后，显示的图片
-  };
-
-  componentDidMount() {
+  useEffect(() => {
     const isWebp = isSupportWebp();
-    this.setState({ isWebp, imgLazyedDom: this.loadedImg(isWebp) });
-  }
-
-  componentWillUnmount() {
-    this.blurTimer = null;
-  }
+    const _imgDom = loadedImg(isWebp);
+    setImgLazyedDom(_imgDom);
+  }, [src, placeholderSrc]);
 
   // 图片加载完
-  onLoad = () => {
-    const { beforeLoad, delayTime } = this.props;
+  const onLoad = () => {
     const _time = delayTime ?? 0.6;
-    this.setState({
-      loaded: true,
-      loadedClassName: {
-        transitionDuration: `${_time}s`,
-        ...imglazyLoadLoaded,
-      },
+    // setLoaded(true);
+    setLoadedClassName({
+      transitionDuration: `${_time}s`,
+      ...imglazyLoadLoaded,
     });
-    beforeLoad?.(this.imgRef); // 回调
+    beforeLoad?.(imgRef.current); // 回调
 
     // 动效remove
-    this.blurTimer = setTimeout(() => {
-      // clearTimeout(this.blurTimer);
-      this.setState({
-        blurLayoutCss: {
-          zIndex: -1,
-          display: 'none',
-        },
+    blurTimer.current = setTimeout(() => {
+      setBlurLayoutCss({
+        zIndex: -1,
+        display: 'none',
       });
     }, _time * 1000);
   };
 
   // 占位符图片url
-  handlePlaceholderSrc = () => {
-    const { imageLoadType, src, placeholderSrc, isHttps } = this.props;
+  const handlePlaceholderSrc = () => {
     let curSrc = src;
     if (isHttps) {
-      curSrc = pattern.test(src) ? this.fillerPlaceholderSrc(src) : defaultImg;
+      curSrc = pattern.test(src) ? fillerPlaceholderSrc(src) : defaultImg;
     }
     // 占位低清晰图支持类型
     const newImgType = {
@@ -91,7 +85,7 @@ class Imgx extends React.Component {
   };
 
   // 过滤缩略图参数
-  fillerPlaceholderSrc = (url) => {
+  const fillerPlaceholderSrc = (url) => {
     let newUrlStr = url;
     if (/\?(imageView2|imageMogr2)\//.test(newUrlStr)) {
       const reg = newUrlStr.match(/(?<u>.*)\?.*/);
@@ -100,7 +94,7 @@ class Imgx extends React.Component {
     return newUrlStr || '';
   };
 
-  addImgUrlWebp = (url, fixUrl = '') => {
+  const addImgUrlWebp = (url, fixUrl = '') => {
     let newUrlStr = url;
     const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
     // 转换格式容错处理
@@ -111,22 +105,20 @@ class Imgx extends React.Component {
     return newUrlStr;
   };
 
-  loadedImg = () => {
-    const isWebp = isSupportWebp();
-    const { alt, errorImgUrl, src, className } = this.props;
+  const loadedImg = (isWebp) => {
     let newUrlStr = src;
 
     // 兼容webp格式
     if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && isWebp) {
-      newUrlStr = this.addImgUrlWebp(newUrlStr);
+      newUrlStr = addImgUrlWebp(newUrlStr);
     } else if (isWebp) {
-      newUrlStr = this.addImgUrlWebp(newUrlStr, '?imageMogr2');
+      newUrlStr = addImgUrlWebp(newUrlStr, '?imageMogr2');
     }
 
     return (
       <img
-        ref={(refs) => (this.imgRef = refs)}
-        onLoad={this.onLoad}
+        ref={imgRef}
+        onLoad={onLoad}
         src={newUrlStr}
         onError={(e) => {
           if (errorImgUrl) {
@@ -135,64 +127,51 @@ class Imgx extends React.Component {
           }
         }}
         alt={alt || ''}
-        className={`${className || ''}`}
-        // style={{
-        //   width: '100%',
-        //   height: '100%',
-        // }}
+        className={className || ''}
+        style={
+          {
+            // width: '100%',
+            // height: '100%',
+          }
+        }
       />
     );
   };
 
-  render() {
-    const { height, width, wrapperClassName, onClick } = this.props;
-    const { loadedClassName, blurLayoutCss } = this.state;
-
-    let wrappercss = {
-      width: '100%',
-      height: '100%',
-    };
-
-    if (wrapperClassName) {
-      wrappercss = {
-        width,
-        height,
-      };
-    }
-    return (
+  return (
+    <div
+      className={`${wrapperClassName || ''}`}
+      style={{
+        height: height,
+        width: width,
+        position: 'relative',
+      }}
+      onClick={onClick}
+    >
+      {imgLazyedDom}
       <div
-        className={`${wrapperClassName || ''}`}
         style={{
-          ...wrappercss,
-          position: 'relative',
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          backgroundColor: 'transparent',
+          ...loadedClassName,
+          ...blurLayoutCss,
         }}
-        onClick={onClick}
       >
-        {this.loadedImg()}
-        <div
+        <img
+          src={handlePlaceholderSrc()}
           style={{
             width: '100%',
             height: '100%',
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            backgroundColor: 'transparent',
-            ...loadedClassName,
-            ...blurLayoutCss,
           }}
-        >
-          <img
-            src={this.handlePlaceholderSrc()}
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-          ></img>
-        </div>
+        ></img>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default Imgx;
 export { Imgx };
