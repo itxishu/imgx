@@ -19,3 +19,14 @@ export const isSupportWebp = () => {
     return false;
   }
 };
+
+export const addImgUrlWebp = (url, fixUrl = '') => {
+  let newUrlStr = url;
+  const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
+  // 转换格式容错处理
+  if (!isUrlFormat) {
+    const tailFixStr = /\/$/g.test(newUrlStr) ? '' : '/';
+    newUrlStr += `${fixUrl}${tailFixStr}format/webp`;
+  }
+  return newUrlStr;
+};

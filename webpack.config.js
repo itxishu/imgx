@@ -12,7 +12,8 @@ module.exports = {
     libraryTarget: 'commonjs',
   },
   target: 'node',
-  devtool: false, // 'source-map'
+  // devtool: false,
+  devtool: 'source-map',
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
   },
