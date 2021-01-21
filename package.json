@@ -1,6 +1,6 @@
 {
   "name": "@kkb/demo",
-  "version": "2.0.1-bate31",
+  "version": "2.0.1-bate34",
   "description": "react image process",
   "main": "./dist/imgx.min.js",
   "scripts": {
@@ -36,7 +36,7 @@
   },
   "homepage": "https://shudong.wang",
   "peerDependencies": {
-    "react": "^16.x.x || ^17.x.x"
+    "react": "^17.x.x"
   },
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.12.1",
