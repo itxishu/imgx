@@ -1,5 +1,5 @@
 import React from 'react';
-import { isSupportWebp, addImgUrlWebp, checkServer } from '../utils';
+import { isSupportWebp, addImgUrlWebp, checkServer } from '../../utils';
 
 class LoadedImg extends React.Component {
   imgRef;
