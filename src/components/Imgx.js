@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { isSupportWebp } from '../utils';
+import { isSupportWebp, checkServer } from '../utils';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
@@ -32,7 +32,7 @@ const Imgx = ({
 }) => {
   const imgRef = useRef(null);
   let blurTimer = useRef(null);
-  // const [loaded, setLoaded] = useState(false);
+  // const [loaded, setLoaded] = useState(true);
   const [blurLayoutCss, setBlurLayoutCss] = useState({
     zIndex: 5,
   });
@@ -46,10 +46,20 @@ const Imgx = ({
   }, []);
 
   useEffect(() => {
-    const isWebp = isSupportWebp();
-    const _imgDom = loadedImg(isWebp);
+    // if (checkServer) return;
+    const _imgDom = loadedImg();
     setImgLazyedDom(_imgDom);
   }, [src, placeholderSrc]);
+
+  // 图片容错处理
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (loaded) {
+  //       setLoaded(false);
+  //       onLoad();
+  //     }
+  //   }, 5000);
+  // }, []);
 
   // 图片加载完
   const onLoad = () => {
@@ -106,7 +116,9 @@ const Imgx = ({
     return newUrlStr;
   };
 
-  const loadedImg = (isWebp) => {
+  const loadedImg = () => {
+    // if (checkServer) return;
+    const isWebp = isSupportWebp();
     let newUrlStr = src;
 
     // 兼容webp格式
@@ -170,6 +182,7 @@ const Imgx = ({
             width: '100%',
             height: '100%',
           }}
+          alt={alt || ''}
         ></img>
       </div>
     </div>

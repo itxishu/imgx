@@ -7,14 +7,12 @@ export const isSupportWebp = () => {
   if (isInitWebp) return _isSupportWebp;
   isInitWebp = true;
   try {
-    if (!checkServer) {
-      _isSupportWebp = document
-        ?.createElement('canvas')
-        .toDataURL('image/webp', 0.1)
-        .includes('data:image/webp');
-      return _isSupportWebp;
-    }
-    return false;
+    if (checkServer) return false;
+    _isSupportWebp = document
+      ?.createElement('canvas')
+      .toDataURL('image/webp', 0.1)
+      .includes('data:image/webp');
+    return _isSupportWebp;
   } catch (err) {
     return false;
   }

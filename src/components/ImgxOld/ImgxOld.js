@@ -1,6 +1,6 @@
 import React from 'react';
-import LoadedImg from './components/LoadedImg';
-import { isSupportWebp, addImgUrlWebp, checkServer } from './utils';
+import LoadedImg from './LoadedImg';
+import { isSupportWebp, addImgUrlWebp, checkServer } from '../../utils';
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
 
