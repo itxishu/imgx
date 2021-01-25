@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { isSupportWebp, checkServer } from '../utils';
+import { isSupportWebp } from '../utils';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
@@ -34,7 +34,7 @@ const Imgx = ({
   let blurTimer = useRef(null);
   // const [loaded, setLoaded] = useState(true);
   const [blurLayoutCss, setBlurLayoutCss] = useState({
-    zIndex: 5,
+    zIndex: 1,
   });
   const [loadedClassName, setLoadedClassName] = useState(imglazyLoadInit);
   const [imgLazyedDom, setImgLazyedDom] = useState(null);
@@ -47,8 +47,8 @@ const Imgx = ({
 
   useEffect(() => {
     // if (checkServer) return;
-    const _imgDom = loadedImg();
-    setImgLazyedDom(_imgDom);
+    const imgElement = loadedImg();
+    setImgLazyedDom(imgElement);
   }, [src, placeholderSrc]);
 
   // 图片容错处理
@@ -63,10 +63,10 @@ const Imgx = ({
 
   // 图片加载完
   const onLoad = () => {
-    const _time = delayTime ?? 0.6;
+    const time = delayTime ?? 0.6;
     // setLoaded(true);
     setLoadedClassName({
-      transitionDuration: `${_time}s`,
+      transitionDuration: `${time}s`,
       ...imglazyLoadLoaded,
     });
     beforeLoad?.(imgRef.current); // 回调
@@ -77,7 +77,7 @@ const Imgx = ({
         zIndex: -1,
         display: 'none',
       });
-    }, _time * 1000);
+    }, time * 1000);
   };
 
   // 占位符图片url
