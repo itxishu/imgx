@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>调试器</title>
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>
+<% if(htmlWebpackPlugin.options.CONFIG.BUILD_ENV !== 'prod') { %>
+<script src="//cdn.jsdelivr.net/npm/eruda@2.4.1/eruda.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/eruda-dom@2.0.0/eruda-dom.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/eruda-fps@2.0.0/eruda-fps.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/eruda-code@2.0.0/eruda-code.min.js"></script>
+<script>
+  const isPc = () => {
+    const ua = navigator.userAgent;
+    if (
+      /AppleWebKit.*Mobile/i.test(ua) ||
+      /MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/
+      .test(
+        ua,
+      )
+    ) {
+      return !/Android|webOS|iPhone|iPod|BlackBerry|iPad/i.test(ua);
+    }
+    return true;
+  };
+  if (!isPc()) {
+    eruda.init({
+      useShadowDom: true,
+    });
+    eruda.add(erudaDom);
+    eruda.add(erudaFps);
+    eruda.add(erudaCode);
+  }
+
+</script>
+<% } %>

@@ -88,7 +88,7 @@ const Imgx = ({
     }
     // 占位低清晰图支持类型
     const newImgType = {
-      qiniu: `${curSrc}?imageMogr2/thumbnail/100x100`,
+      qiniu: `${curSrc}?imageMogr2/thumbnail/100x100/blur/3x5`,
       oss: '',
       custom: placeholderSrc, // 用户自定义
     };
