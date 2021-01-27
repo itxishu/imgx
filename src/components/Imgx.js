@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { isSupportWebp } from '../utils';
+import { useIntersection } from '../utils/use-intersection';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
@@ -30,14 +31,19 @@ const Imgx = ({
   errorImgUrl, // 图片加载失败后，显示的图片
   alt,
 }) => {
-  const imgRef = useRef(null);
-  let blurTimer = useRef(null);
+  // const imgRef = useRef(null);
+  const blurTimer = useRef(null);
   // const [loaded, setLoaded] = useState(true);
   const [blurLayoutCss, setBlurLayoutCss] = useState({
     zIndex: 1,
   });
   const [loadedClassName, setLoadedClassName] = useState(imglazyLoadInit);
   const [imgLazyedDom, setImgLazyedDom] = useState(null);
+  const isLazy = true;
+  const [imgRef, isIntersected] = useIntersection({
+    rootMargin: '200px',
+    disabled: !isLazy,
+  });
 
   useEffect(() => {
     return () => {
@@ -69,7 +75,7 @@ const Imgx = ({
       transitionDuration: `${time}s`,
       ...imglazyLoadLoaded,
     });
-    beforeLoad?.(imgRef.current); // 回调
+    beforeLoad?.(imgRef); // 回调
 
     // 动效remove
     blurTimer.current = setTimeout(() => {
@@ -157,8 +163,8 @@ const Imgx = ({
     <div
       className={`${wrapperClassName || ''}`}
       style={{
-        height: height,
-        width: width,
+        height,
+        width,
         position: 'relative',
       }}
       onClick={onClick}
@@ -183,7 +189,7 @@ const Imgx = ({
             height: '100%',
           }}
           alt={alt || ''}
-        ></img>
+        />
       </div>
     </div>
   );

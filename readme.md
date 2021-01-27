@@ -24,7 +24,7 @@ import { Imgx } from '@kkb/imgx';
 const DemoPage = ({ images }) => (
   <div>
     <Imgx
-      src={"https://n1-q.mafengwo.net/s15/M00/52/1F/CoUBGV4DS8iAYKvfACPhDULBto4374.png"}
+      src={"https://img.kaikeba.com/platform/247103210202xrti.jpg"}
       wrapperClassName={'cssName'} // 外层样式，必须定义宽高，这样才有动画渐变效果
       className={'cssName'} // img标签样式
       delayTime={2.3} // 动画持续时间

@@ -103,9 +103,10 @@ module.exports = {
     'react/destructuring-assignment': 'off',
     'react/jsx-filename-extension': 'off', // 扩展名必须jsx
     'sort-imports': 0, // import 排序
+    'no-restricted-globals': 0,
     // Makes no sense to allow type inferrence for expression parameters, but require typing the response
     '@typescript-eslint/no-use-before-define': [
-      'error',
+      0,
       { functions: false, classes: true, variables: true, typedefs: true },
     ],
     // 是否不允许推断类型
@@ -137,6 +138,9 @@ module.exports = {
     'no-param-reassign': 2, // 禁止重新分配功能参数
     'space-before-function-paren': 0, // 要求或禁止函数圆括号之前有一个空格
     'import/extensions': 0, // 确保在导入路径中使用一致文件扩展名
+    'no-self-assign': 'warn',
+    'no-self-compare': 'warn',
+    'func-names': 0,
   },
   settings: {
     // support import modules from TypeScript files in JavaScript files
