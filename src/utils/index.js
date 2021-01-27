@@ -1,6 +1,6 @@
 let isInitWebp = false; // 是否初始化判断webp
 let _isSupportWebp = false;
-export const checkServer = process.browser === false && typeof window === 'undefined';
+export const checkServer = typeof window === 'undefined';
 
 // 浏览器是否兼容webp
 export const isSupportWebp = () => {

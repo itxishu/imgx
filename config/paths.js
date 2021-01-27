@@ -52,6 +52,6 @@ module.exports = {
   appPackageJson: resolveApp('package.json'),
   appNodeModules: resolveApp('node_modules'),
   // link指定项目中
-  // linkPackageProject: resolveApp(`../${copyProject}/package.json`),
-  // linkDistProject: resolveApp(`../${copyProject}/build`),
+  linkPackageProject: resolveApp(`../${copyProject}/package.json`),
+  linkDistProject: resolveApp(`../${copyProject}/build`),
 };
