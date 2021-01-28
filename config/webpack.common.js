@@ -53,7 +53,9 @@ const webpackConfig = {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              localIdentName: '[local]_[contenthash:8]',
+              modules: {
+                localIdentName: '[local]_[contenthash:8]',
+              },
             },
           },
           {

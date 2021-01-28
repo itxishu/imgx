@@ -1,18 +1,18 @@
-let isInitWebp = false; // 是否初始化判断webp
-let _isSupportWebp = false;
+// let isInitWebp = false; // 是否初始化判断webp
+// let _isSupportWebp = false;
 export const checkServer = typeof window === 'undefined';
 
 // 浏览器是否兼容webp
 export const isSupportWebp = () => {
-  if (isInitWebp) return _isSupportWebp;
-  isInitWebp = true;
+  // if (isInitWebp) return _isSupportWebp;
+  // isInitWebp = true;
   try {
     if (checkServer) return false;
-    _isSupportWebp = document
+    const iswebp = document
       ?.createElement('canvas')
       .toDataURL('image/webp', 0.1)
       .includes('data:image/webp');
-    return _isSupportWebp;
+    return iswebp;
   } catch (err) {
     return false;
   }
@@ -27,4 +27,14 @@ export const addImgUrlWebp = (url, fixUrl = '') => {
     newUrlStr += `${fixUrl}${tailFixStr}format/webp`;
   }
   return newUrlStr;
+};
+
+export const getInt = (x) => {
+  if (typeof x === 'number') {
+    return x;
+  }
+  if (typeof x === 'string') {
+    return parseInt(x, 10);
+  }
+  return undefined;
 };
