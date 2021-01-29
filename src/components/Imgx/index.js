@@ -1,6 +1,5 @@
 import React from 'react';
-import LoadedImg from './LoadedImg';
-import { isSupportWebp, addImgUrlWebp, check_webp_feature } from '../../utils';
+import { addImgUrlWebp, checkWebpFeature } from '../../utils';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
@@ -41,20 +40,12 @@ class Imgx extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    let imgdom = new Image();
-    //  img.onload = function () {
-    //    var result = img.width > 0 && img.height > 0;
-    //  };
-    //  img.onerror = function () {
-    //  };
-    //  img.src = ;
-    check_webp_feature().then((res) => {
+  componentDidMount() {
+    checkWebpFeature().then((res) => {
       this.setState({
         iswebp: res,
         initImg: true,
       });
-      console.log('结果', res);
     });
   }
 
@@ -65,16 +56,16 @@ class Imgx extends React.Component {
   // 图片加载完
   onLoad = (imgRef) => {
     const { beforeLoad, delayTime } = this.props;
-    const _time = delayTime ?? 0.6;
+    const time = delayTime ?? 0.6;
     this.setState({
       loaded: true,
       loadedClassName: {
-        transitionDuration: `${_time}s`,
+        transitionDuration: `${time}s`,
         ...imglazyLoadLoaded,
       },
     });
     beforeLoad?.(imgRef);
-    console.log('加载后');
+
     // 动效remove
     this.blurTimer = setTimeout(() => {
       clearTimeout(this.blurTimer);
@@ -84,7 +75,7 @@ class Imgx extends React.Component {
           display: 'none',
         },
       });
-    }, _time * 1000);
+    }, time * 1000);
   };
 
   // 占位符图片url
@@ -127,7 +118,7 @@ class Imgx extends React.Component {
     } = this.props;
     let newUrlStr = src;
     const { iswebp, initImg } = this.state;
-    if (!initImg) return;
+    if (!initImg) return null;
     if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && iswebp) {
       // 兼容webp格式
       newUrlStr = addImgUrlWebp(newUrlStr);

@@ -42,8 +42,8 @@ export const getInt = (x) => {
 // check_webp_feature:
 //   'feature' can be one of 'lossy', 'lossless', 'alpha' or 'animation'.
 //   'callback(feature, result)' will be passed back the detection result (in an asynchronous way!)
-export function check_webp_feature() {
-  return new Promise((reslove, reject) => {
+export const checkWebpFeature = () => {
+  return new Promise((reslove) => {
     // const kTestImages = {
     //   lossy: 'UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA',
     //   lossless: 'UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA==',
@@ -64,4 +64,4 @@ export function check_webp_feature() {
       'data:image/webp;base64,' +
       'UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA';
   });
-}
+};
