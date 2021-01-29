@@ -32,7 +32,7 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`);
 };
 // 指定link项目内
-const copyProject = '../fe-tool/fig-ssr/node_modules/@kkb/demo';
+const copyProject = './homeup/node_modules/@kkb/demo';
 
 // config after eject: we're in ./config/
 module.exports = {
@@ -52,6 +52,6 @@ module.exports = {
   appPackageJson: resolveApp('package.json'),
   appNodeModules: resolveApp('node_modules'),
   // link指定项目中
-  linkPackageProject: resolveApp(`../${copyProject}/package.json`),
-  linkDistProject: resolveApp(`../${copyProject}/build`),
+  // linkPackageProject: resolveApp(`../${copyProject}/package.json`),
+  // linkDistProject: resolveApp(`../${copyProject}/build`),
 };

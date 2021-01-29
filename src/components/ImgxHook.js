@@ -16,7 +16,7 @@ const imglazyLoadLoaded = {
   animationFillMode: 'both',
 };
 
-const Imgx = ({
+const ImgxHook = ({
   src = '', // 图片url
   delayTime = 1, // 动画持续时间
   isHttps = true, // 图片是否必须https
@@ -195,4 +195,4 @@ const Imgx = ({
   );
 };
 
-export default Imgx;
+export default ImgxHook;

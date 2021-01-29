@@ -1,6 +1,7 @@
 import React from 'react';
 import LoadedImg from './LoadedImg';
-import { isSupportWebp, addImgUrlWebp, checkServer } from '../../utils';
+import { isSupportWebp, addImgUrlWebp, check_webp_feature } from '../../utils';
+
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
 
@@ -16,6 +17,17 @@ const imglazyLoadLoaded = {
 };
 
 class Imgx extends React.Component {
+  static defaultProps = {
+    src: '', // 图片url
+    delayTime: 1, // 动画持续时间
+    isHttps: true, // 图片是否必须https
+    imageLoadType: 'qiniu', // 低清晰图类型，默认qiniu七牛
+    placeholderSrc: '', // 自定义低清晰url
+    // beforeLoad: () => {} // 加载后回调
+    // onClick: () => {} // 点击事件
+    // errorImgUrl: "url", // 图片加载失败后，显示的图片
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,20 +36,27 @@ class Imgx extends React.Component {
         zIndex: 1,
       },
       loadedClassName: imglazyLoadInit,
-      imgDom: null,
+      initImg: false,
+      iswebp: false,
     };
   }
 
-  static defaultProps = {
-    src: '', // 图片url
-    delayTime: 1.3, // 动画持续时间
-    isHttps: true, // 图片是否必须https
-    imageLoadType: 'qiniu', // 低清晰图类型，默认qiniu七牛
-    placeholderSrc: '', // 自定义低清晰url
-    // beforeLoad: () => {} // 加载后回调
-    // onClick: () => {} // 点击事件
-    // errorImgUrl: "url", // 图片加载失败后，显示的图片
-  };
+  async componentDidMount() {
+    let imgdom = new Image();
+    //  img.onload = function () {
+    //    var result = img.width > 0 && img.height > 0;
+    //  };
+    //  img.onerror = function () {
+    //  };
+    //  img.src = ;
+    check_webp_feature().then((res) => {
+      this.setState({
+        iswebp: res,
+        initImg: true,
+      });
+      console.log('结果', res);
+    });
+  }
 
   componentWillUnmount() {
     this.blurTimer = null;
@@ -55,10 +74,10 @@ class Imgx extends React.Component {
       },
     });
     beforeLoad?.(imgRef);
-
+    console.log('加载后');
     // 动效remove
     this.blurTimer = setTimeout(() => {
-      // clearTimeout(this.blurTimer);
+      clearTimeout(this.blurTimer);
       this.setState({
         blurLayoutCss: {
           zIndex: -1,
@@ -95,29 +114,48 @@ class Imgx extends React.Component {
   };
 
   loadedImg = () => {
-    const { alt, errorImgUrl, src, className } = this.props;
-    const isWebp = isSupportWebp();
+    const {
+      delayTime,
+      isHttps,
+      imageLoadType,
+      placeholderSrc,
+      onClick,
+      errorImgUrl,
+      wrapperClassName,
+      src,
+      ...imgAll
+    } = this.props;
     let newUrlStr = src;
-    // 兼容webp格式
-    if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && isWebp) {
+    const { iswebp, initImg } = this.state;
+    if (!initImg) return;
+    if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && iswebp) {
+      // 兼容webp格式
       newUrlStr = addImgUrlWebp(newUrlStr);
-    } else if (isWebp) {
+    } else if (iswebp) {
       newUrlStr = addImgUrlWebp(newUrlStr, '?imageMogr2');
     }
 
     return (
       <img
-        ref={(refs) => (this.imgRef = refs)}
-        onLoad={() => this.onLoad(this.imgRef)}
+        ref={(refs) => {
+          this.imgRef = refs;
+        }}
         src={newUrlStr}
+        alt={imgAll.alt || ''}
+        onLoad={() => this.onLoad(this.imgRef)}
         onError={(e) => {
           if (errorImgUrl) {
             e.target.onerror = null;
             e.target.src = `${errorImgUrl}`;
           }
         }}
-        alt={alt || ''}
-        className={className || ''}
+        loading="lazy"
+        decoding="async"
+        {...imgAll}
+        style={{
+          display: this.loaded ? 'none' : 'inherit',
+          border: 0,
+        }}
       />
     );
   };
@@ -155,7 +193,7 @@ class Imgx extends React.Component {
               width: '100%',
               height: '100%',
             }}
-          ></img>
+          />
         </div>
       </div>
     );
