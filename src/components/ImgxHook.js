@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { isSupportWebp } from '../utils';
+import { checkWebpFeature } from '../utils';
 import { useIntersection } from '../utils/use-intersection';
 
 const pattern = new RegExp('http(s)?://[^s]*');
@@ -52,9 +52,9 @@ const ImgxHook = ({
   }, []);
 
   useEffect(() => {
-    // if (checkServer) return;
-    const imgElement = loadedImg();
-    setImgLazyedDom(imgElement);
+    loadedImg().then((imgElement) => {
+      setImgLazyedDom(imgElement);
+    });
   }, [src, placeholderSrc]);
 
   // 图片容错处理
@@ -122,9 +122,8 @@ const ImgxHook = ({
     return newUrlStr;
   };
 
-  const loadedImg = () => {
-    // if (checkServer) return;
-    const isWebp = isSupportWebp();
+  const loadedImg = async () => {
+    const isWebp = await checkWebpFeature();
     let newUrlStr = src;
 
     // 兼容webp格式

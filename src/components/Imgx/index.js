@@ -113,6 +113,7 @@ class Imgx extends React.Component {
       onClick,
       errorImgUrl,
       wrapperClassName,
+      beforeLoad,
       src,
       ...imgAll
     } = this.props;
@@ -145,7 +146,6 @@ class Imgx extends React.Component {
         {...imgAll}
         style={{
           display: this.loaded ? 'none' : 'inherit',
-          border: 0,
         }}
       />
     );
