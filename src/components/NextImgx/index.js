@@ -29,7 +29,7 @@ const NextImgx = ({
   layout,
   height,
   width,
-  quality,
+  quality = 90,
   imgHitWidth,
   beforeLoad, // 加载后回调
   onClick, // 点击事件
