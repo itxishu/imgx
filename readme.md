@@ -31,6 +31,7 @@ const DemoPage = ({ images }) => (
       beforeLoad={() => {}} // 加载后回调
       onClick={(e) => {}} // 点击事件
       errorImgUrl={"url"} // 图片加载失败后，显示的图片
+      imgHitWidth={400} // 图片压缩宽度（等比压缩）
     />
   </div>
 );
@@ -44,10 +45,11 @@ const DemoPage = ({ images }) => (
 |  wrapperClassName    |   String  |     |   组件外层样式，必须定义宽度，低倍图过渡效果动画才有  |
 |  className    |   String  |     |   img图片样式  |
 |  src   |  String   |     |  图片地址   |
+|   imgHitWidth  |   number  |     |  图片压缩宽度，等比压缩图片，无需设置压缩高度   |
 |  delayTime   |   number  |  1   |   过渡动画持续时间，单位秒  |
 |  imageLoadType   |   String  |  qiniu   |  低清图类型，可开启自定义模式，配合placeholderSrc使用   |
 |  placeholderSrc   |   String  |     |   低清图url地址  |
 |  beforeLoad   | Function    |     |  img加载后回调   |
 |  onClick   | Function    |     | imx点击事件    |
-|   errorImgUrl  |  String   |     |  图片加载失败后，显示的图片   |
+|  errorImgUrl  |  String   |     |  图片加载失败后，显示的图片   |
 <!-- |     |     |     |     | -->

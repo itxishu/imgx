@@ -145,14 +145,14 @@ class Imgx extends React.Component {
         decoding="async"
         {...imgAll}
         style={{
-          display: this.loaded ? 'none' : 'inherit',
+          display: this.state.loaded ? 'none' : 'inherit',
         }}
       />
     );
   };
 
   render() {
-    const { height, width, wrapperClassName, onClick } = this.props;
+    const { height, width, wrapperClassName, onClick, alt } = this.props;
     const { loadedClassName, blurLayoutCss } = this.state;
 
     return (
@@ -184,6 +184,7 @@ class Imgx extends React.Component {
               width: '100%',
               height: '100%',
             }}
+            alt={alt}
           />
         </div>
       </div>
@@ -192,4 +193,3 @@ class Imgx extends React.Component {
 }
 
 export default Imgx;
-export { Imgx };

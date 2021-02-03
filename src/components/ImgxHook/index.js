@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { checkWebpFeature } from '../utils';
-import { useIntersection } from '../utils/use-intersection';
+import { checkWebpFeature, getImgGzip } from '../../utils';
+// import { useIntersection } from '../utils/use-intersection';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
@@ -30,8 +30,10 @@ const ImgxHook = ({
   onClick, // 点击事件
   errorImgUrl, // 图片加载失败后，显示的图片
   alt,
+  imgHitWidth, // 图片压缩宽度
+  quality = 75, // 压缩质量
 }) => {
-  // const imgRef = useRef(null);
+  const imgRef = useRef(null);
   const blurTimer = useRef(null);
   // const [loaded, setLoaded] = useState(true);
   const [blurLayoutCss, setBlurLayoutCss] = useState({
@@ -39,11 +41,11 @@ const ImgxHook = ({
   });
   const [loadedClassName, setLoadedClassName] = useState(imglazyLoadInit);
   const [imgLazyedDom, setImgLazyedDom] = useState(null);
-  const isLazy = true;
-  const [imgRef, isIntersected] = useIntersection({
-    rootMargin: '200px',
-    disabled: !isLazy,
-  });
+  // const isLazy = true;
+  // const [imgRef, isIntersected] = useIntersection({
+  //   rootMargin: '200px',
+  //   disabled: !isLazy,
+  // });
 
   useEffect(() => {
     return () => {
@@ -123,16 +125,15 @@ const ImgxHook = ({
   };
 
   const loadedImg = async () => {
-    const isWebp = await checkWebpFeature();
-    let newUrlStr = src;
+    const iswebp = await checkWebpFeature();
+    const newUrlStr = getImgGzip({ src, width: imgHitWidth, quality, iswebp });
 
     // 兼容webp格式
-    if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && isWebp) {
-      newUrlStr = addImgUrlWebp(newUrlStr);
-    } else if (isWebp) {
-      newUrlStr = addImgUrlWebp(newUrlStr, '?imageMogr2');
-    }
-
+    // if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && iswebp) {
+    //   newUrlStr = addImgUrlWebp(newUrlStr);
+    // } else if (iswebp) {
+    //   newUrlStr = addImgUrlWebp(newUrlStr, '?imageMogr2');
+    // }
     return (
       <img
         ref={imgRef}

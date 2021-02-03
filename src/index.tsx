@@ -1,6 +1,6 @@
 import withHooksHoc from './utils/withHooksHoc';
-import ImgxHook from './components/ImgxHook';
-import Imgx from './components/Imgx';
+import Imgx from './components/ImgxHook';
+import ImgxClass from './components/ImgxClass';
 
-export { withHooksHoc, ImgxHook, Imgx };
+export { withHooksHoc, Imgx, ImgxClass };
 export default Imgx;

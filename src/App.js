@@ -16,7 +16,7 @@ const App = () => {
       <div style={{ width: 500 }}>
         <Imgx
           src="https://img.kaikeba.com/platform/247103210202xrti.jpg"
-          wrapperClassName="cssName" // 外层样式，必须定义宽高，这样才有动画渐变效果
+          wrapperClassName={styles.boxWrap} // 外层样式，必须定义宽高，这样才有动画渐变效果
           className={styles.boxWrap} // img标签样式
           delayTime={2.3} // 动画持续时间
           beforeLoad={(config) => {
@@ -26,8 +26,9 @@ const App = () => {
             console.log('点击', e);
           }} // 点击事件
           // layout="fill"
-          width={400}
-          height={400}
+          // width={400}
+          // height={400}
+          imgHitWidth={600}
         />
       </div>
     </div>

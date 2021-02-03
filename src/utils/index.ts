@@ -1,11 +1,7 @@
-// let isInitWebp = false; // 是否初始化判断webp
-// let _isSupportWebp = false;
 export const checkServer = typeof window === 'undefined';
 
 // 浏览器是否兼容webp
 export const isSupportWebp = () => {
-  // if (isInitWebp) return _isSupportWebp;
-  // isInitWebp = true;
   try {
     if (checkServer) return false;
     const iswebp = document
@@ -18,7 +14,8 @@ export const isSupportWebp = () => {
   }
 };
 
-export const addImgUrlWebp = (url, fixUrl = '') => {
+// 七牛图片后缀添加webp
+export const addImgUrlWebp = (url: string, fixUrl = '') => {
   let newUrlStr = url;
   const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
   // 转换格式容错处理
@@ -29,7 +26,7 @@ export const addImgUrlWebp = (url, fixUrl = '') => {
   return newUrlStr;
 };
 
-export const getInt = (x) => {
+export const getInt = (x: number | string) => {
   if (typeof x === 'number') {
     return x;
   }
@@ -39,9 +36,7 @@ export const getInt = (x) => {
   return undefined;
 };
 
-// check_webp_feature:
-//   'feature' can be one of 'lossy', 'lossless', 'alpha' or 'animation'.
-//   'callback(feature, result)' will be passed back the detection result (in an asynchronous way!)
+// 判断是否webp
 export const checkWebpFeature = () => {
   return new Promise((reslove) => {
     // const kTestImages = {
@@ -64,4 +59,33 @@ export const checkWebpFeature = () => {
       'data:image/webp;base64,' +
       'UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA';
   });
+};
+
+interface ImgGzipData {
+  src: string;
+  width?: number;
+  quality: number;
+  iswebp?: boolean;
+}
+
+// 七牛压缩指定宽
+export const getImgGzip = ({
+  src,
+  width,
+  quality = 75,
+  iswebp,
+}: ImgGzipData): string => {
+  let newUrl = src;
+  if (!/\?(imageView2|imageMogr2)\//.test(newUrl)) {
+    newUrl = `${src}?imageMogr2/quality/${quality}`;
+    if (width) {
+      newUrl += `/thumbnail/${width || ''}x`;
+    }
+
+    if (iswebp) {
+      newUrl += `/format/webp`;
+    }
+  }
+
+  return newUrl;
 };
