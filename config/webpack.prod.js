@@ -92,6 +92,7 @@ module.exports = function (config) {
     ].filter(Boolean),
     externals: {
       react: 'commonjs react',
+      next: 'commonjs next',
     },
   };
 };

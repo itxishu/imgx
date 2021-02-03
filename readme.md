@@ -19,11 +19,11 @@ react版本必须为17.x.x 以上。
 
 ``` jsx
 import React from 'react';
-import { Imgx } from '@kkb/imgx';
+import { NextImgx } from '@kkb/imgx-ssr';
 
 const DemoPage = ({ images }) => (
   <div>
-    <Imgx
+    <NextImgx
       src={"https://img.kaikeba.com/platform/247103210202xrti.jpg"}
       wrapperClassName={'cssName'} // 外层样式，必须定义宽高，这样才有动画渐变效果
       className={'cssName'} // img标签样式

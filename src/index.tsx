@@ -1,6 +1,6 @@
-import withHooksHoc from './utils/withHooksHoc';
-import Imgx from './components/ImgxHook';
-import ImgxClass from './components/ImgxClass';
+// import withHooksHoc from './utils/withHooksHoc';
+import NextImgx from './components/NextImgx';
+// import ImgxClass from './components/ImgxClass';
 
-export { withHooksHoc, Imgx, ImgxClass };
-export default Imgx;
+export { NextImgx };
+export default NextImgx;

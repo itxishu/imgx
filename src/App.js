@@ -1,5 +1,5 @@
 import React from 'react';
-import { Imgx } from './index';
+import Imgx from './components/ImgxHook';
 import styles from './index.less';
 
 const App = () => {
