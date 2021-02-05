@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { checkWebpFeature, getImgGzip } from '../../utils';
 import { useIntersection } from '../../utils/use-intersection';
 import {
