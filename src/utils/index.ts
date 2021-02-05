@@ -1,7 +1,7 @@
 export const checkServer = typeof window === 'undefined';
 
 // 浏览器是否兼容webp
-export const isSupportWebp = () => {
+export const isSupportWebp = (): boolean => {
   try {
     if (checkServer) return false;
     const iswebp = document
@@ -15,7 +15,7 @@ export const isSupportWebp = () => {
 };
 
 // 七牛图片后缀添加webp
-export const addImgUrlWebp = (url: string, fixUrl = '') => {
+export const addImgUrlWebp = (url: string, fixUrl = ''): string => {
   let newUrlStr = url;
   const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
   // 转换格式容错处理
@@ -26,7 +26,7 @@ export const addImgUrlWebp = (url: string, fixUrl = '') => {
   return newUrlStr;
 };
 
-export const getInt = (x: number | string) => {
+export const getInt = (x: number | string): number | undefined => {
   if (typeof x === 'number') {
     return x;
   }
@@ -37,7 +37,7 @@ export const getInt = (x: number | string) => {
 };
 
 // 判断是否webp
-export const checkWebpFeature = () => {
+export const checkWebpFeature = (): Promise<boolean> => {
   return new Promise((reslove) => {
     // const kTestImages = {
     //   lossy: 'UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA',

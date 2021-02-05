@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { checkWebpFeature, getImgGzip } from '../../utils';
-// import { useIntersection } from '../utils/use-intersection';
+import { useIntersection } from '../../utils/use-intersection';
+import { ImgxHookProps, LoadedClassNameData } from './index.d';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
 
-const imglazyLoadInit = {
+const imglazyLoadInit: LoadedClassNameData = {
   filter: 'blur(8px)',
   opacity: 1,
 };
@@ -18,8 +19,7 @@ const imglazyLoadLoaded = {
 
 const ImgxHook = ({
   src = '', // 图片url
-  delayTime = 1, // 动画持续时间
-  isHttps = true, // 图片是否必须https
+  delayTime = 0.6, // 动画持续时间
   imageLoadType = 'qiniu', // 低清晰图类型，默认qiniu七牛
   placeholderSrc = '', // 自定义低清晰url
   className,
@@ -32,20 +32,23 @@ const ImgxHook = ({
   alt,
   imgHitWidth, // 图片压缩宽度
   quality = 75, // 压缩质量
-}) => {
-  const imgRef = useRef(null);
-  const blurTimer = useRef(null);
+  loading,
+}: ImgxHookProps) => {
+  // const imgRef = useRef(null);
+  const blurTimer = useRef<any>(null);
   // const [loaded, setLoaded] = useState(true);
   const [blurLayoutCss, setBlurLayoutCss] = useState({
     zIndex: 1,
   });
-  const [loadedClassName, setLoadedClassName] = useState(imglazyLoadInit);
-  const [imgLazyedDom, setImgLazyedDom] = useState(null);
-  // const isLazy = true;
-  // const [imgRef, isIntersected] = useIntersection({
-  //   rootMargin: '200px',
-  //   disabled: !isLazy,
-  // });
+  const [loadedClassName, setLoadedClassName] = useState<LoadedClassNameData>(
+    imglazyLoadInit,
+  );
+  const [imgLazyedDom, setImgLazyedDom] = useState<JSX.Element>();
+  const isLazy = loading === 'lazy' || typeof loading === 'undefined';
+  const [imgRef, isIntersected] = useIntersection({
+    rootMargin: '200px',
+    disabled: !isLazy,
+  });
 
   useEffect(() => {
     return () => {
@@ -91,9 +94,8 @@ const ImgxHook = ({
   // 占位符图片url
   const handlePlaceholderSrc = () => {
     let curSrc = src;
-    if (isHttps) {
-      curSrc = pattern.test(src) ? fillerPlaceholderSrc(src) : defaultImg;
-    }
+    curSrc = pattern.test(src) ? fillerPlaceholderSrc(src) : defaultImg;
+
     // 占位低清晰图支持类型
     const newImgType = {
       qiniu: `${curSrc}?imageMogr2/thumbnail/100x`,
@@ -104,7 +106,7 @@ const ImgxHook = ({
   };
 
   // 过滤缩略图参数
-  const fillerPlaceholderSrc = (url) => {
+  const fillerPlaceholderSrc = (url: string) => {
     let newUrlStr = url;
     if (/\?(imageView2|imageMogr2)\//.test(newUrlStr)) {
       const reg = newUrlStr.match(/(?<u>.*)\?.*/);
@@ -113,7 +115,7 @@ const ImgxHook = ({
     return newUrlStr || '';
   };
 
-  const loadedImg = async () => {
+  const loadedImg = async (): Promise<JSX.Element> => {
     const iswebp = await checkWebpFeature();
     const newUrlStr = getImgGzip({ src, width: imgHitWidth, quality, iswebp });
 
@@ -122,7 +124,7 @@ const ImgxHook = ({
         ref={imgRef}
         onLoad={onLoad}
         src={newUrlStr}
-        onError={(e) => {
+        onError={(e: any) => {
           if (errorImgUrl) {
             e.target.onerror = null;
             e.target.src = `${errorImgUrl}`;
@@ -132,7 +134,7 @@ const ImgxHook = ({
         className={className || ''}
         style={
           className
-            ? null
+            ? undefined
             : {
                 width: '100%',
                 height: '100%',
