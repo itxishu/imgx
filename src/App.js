@@ -15,7 +15,7 @@ const App = () => {
       <div style={{ height: '600vh' }}>m内容</div>
       <div style={{ width: 500 }}>
         <Imgx
-          src="https://img.kaikeba.com/platform/247103210202xrti.jpg"
+          src="https://img.kaikeba.com/platform/247103210202xrti2.jpg"
           wrapperClassName={styles.boxWrap} // 外层样式，必须定义宽高，这样才有动画渐变效果
           className={styles.boxWrap} // img标签样式
           delayTime={2.3} // 动画持续时间
@@ -28,7 +28,8 @@ const App = () => {
           // layout="fill"
           // width={400}
           // height={400}
-          imgHitWidth={600}
+          // imgHitWidth={600}
+          // loading="eager"
         />
       </div>
     </div>

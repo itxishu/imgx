@@ -1,7 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { checkWebpFeature, getImgGzip } from '../../utils';
 import { useIntersection } from '../../utils/use-intersection';
-import { ImgxHookProps, LoadedClassNameData } from './index.d';
+import {
+  ImgxHookProps,
+  LoadedClassNameData,
+  GenImgAttrsResult,
+} from './index.d';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
@@ -33,10 +37,9 @@ const ImgxHook = ({
   imgHitWidth, // 图片压缩宽度
   quality = 75, // 压缩质量
   loading,
+  offset = '100px', // 图片懒加载偏移距离，默认可视区外100px内就开始加载图片
 }: ImgxHookProps) => {
-  // const imgRef = useRef(null);
   const blurTimer = useRef<any>(null);
-  // const [loaded, setLoaded] = useState(true);
   const [blurLayoutCss, setBlurLayoutCss] = useState({
     zIndex: 1,
   });
@@ -45,10 +48,17 @@ const ImgxHook = ({
   );
   const [imgLazyedDom, setImgLazyedDom] = useState<JSX.Element>();
   const isLazy = loading === 'lazy' || typeof loading === 'undefined';
-  const [imgRef, isIntersected] = useIntersection({
-    rootMargin: '200px',
+  const [setRef, isIntersected, imgRef] = useIntersection({
+    rootMargin: offset,
     disabled: !isLazy,
   });
+  const isVisible = !isLazy || isIntersected;
+  const imgAttributes: GenImgAttrsResult = {
+    src:
+      'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+    srcSet: undefined,
+    sizes: undefined,
+  };
 
   useEffect(() => {
     return () => {
@@ -60,7 +70,7 @@ const ImgxHook = ({
     loadedImg().then((imgElement) => {
       setImgLazyedDom(imgElement);
     });
-  }, [src, placeholderSrc]);
+  }, [src, placeholderSrc, isVisible]);
 
   // 图片容错处理
   // useEffect(() => {
@@ -73,14 +83,13 @@ const ImgxHook = ({
   // }, []);
 
   // 图片加载完
-  const onLoad = () => {
+  const onLoad = useCallback(() => {
     const time = delayTime ?? 0.6;
-    // setLoaded(true);
     setLoadedClassName({
       transitionDuration: `${time}s`,
       ...imglazyLoadLoaded,
     });
-    beforeLoad?.(imgRef); // 回调
+    beforeLoad?.(imgRef?.current); // 回调
 
     // 动效remove
     blurTimer.current = setTimeout(() => {
@@ -89,7 +98,7 @@ const ImgxHook = ({
         // display: 'none',
       });
     }, time * 1000);
-  };
+  }, [src]);
 
   // 占位符图片url
   const handlePlaceholderSrc = () => {
@@ -116,12 +125,31 @@ const ImgxHook = ({
   };
 
   const loadedImg = async (): Promise<JSX.Element> => {
+    if (!isVisible) {
+      return (
+        <img
+          ref={setRef}
+          alt={alt || ''}
+          className={className || ''}
+          style={
+            className
+              ? undefined
+              : {
+                  width: '100%',
+                  height: '100%',
+                }
+          }
+          {...imgAttributes}
+        />
+      );
+    }
+
     const iswebp = await checkWebpFeature();
     const newUrlStr = getImgGzip({ src, width: imgHitWidth, quality, iswebp });
 
     return (
       <img
-        ref={imgRef}
+        ref={setRef}
         onLoad={onLoad}
         src={newUrlStr}
         onError={(e: any) => {

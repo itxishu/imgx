@@ -14,6 +14,7 @@ export interface ImgxHookProps {
   imgHitWidth?: number;
   quality?: number;
   loading?: 'lazy' | 'eager' | undefined;
+  offset: string;
 }
 
 // 图片加载样式
@@ -22,3 +23,9 @@ export interface LoadedClassNameData {
   opacity: number;
   transitionDuration?: string;
 }
+
+export type GenImgAttrsResult = {
+  src: string;
+  srcSet: string | undefined;
+  sizes: string | undefined;
+};
