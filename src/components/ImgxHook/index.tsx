@@ -1,11 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from 'react';
 import { checkWebpFeature, getImgGzip } from '../../utils';
 import { useIntersection } from '../../utils/use-intersection';
 import {
   ImgxHookProps,
   LoadedClassNameData,
   GenImgAttrsResult,
-} from './index.d';
+} from '../../typings/imgx.d';
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
@@ -46,41 +52,34 @@ const ImgxHook = ({
   const [loadedClassName, setLoadedClassName] = useState<LoadedClassNameData>(
     imglazyLoadInit,
   );
-  const [imgLazyedDom, setImgLazyedDom] = useState<JSX.Element>();
+  const [imgUrl, setImgUrl] = useState(''); // 图片加载完url
+  const imgRef = useRef<HTMLImageElement | null>(null);
   const isLazy = loading === 'lazy' || typeof loading === 'undefined';
-  const [setRef, isIntersected, imgRef] = useIntersection({
+  const [setRef, isIntersected] = useIntersection({
     rootMargin: offset,
     disabled: !isLazy,
   });
   const isVisible = !isLazy || isIntersected;
   const imgAttributes: GenImgAttrsResult = {
-    src:
-      'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+    src: isVisible
+      ? imgUrl
+      : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
     srcSet: undefined,
     sizes: undefined,
   };
 
   useEffect(() => {
+    handleImgUrl();
     return () => {
       blurTimer.current = null;
     };
   }, []);
 
-  useEffect(() => {
-    loadedImg().then((imgElement) => {
-      setImgLazyedDom(imgElement);
-    });
-  }, [src, placeholderSrc, isVisible]);
-
-  // 图片容错处理
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (loaded) {
-  //       setLoaded(false);
-  //       onLoad();
-  //     }
-  //   }, 5000);
-  // }, []);
+  const handleImgUrl = async () => {
+    const iswebp = await checkWebpFeature();
+    const newUrlStr = getImgGzip({ src, width: imgHitWidth, quality, iswebp });
+    setImgUrl(newUrlStr);
+  };
 
   // 图片加载完
   const onLoad = useCallback(() => {
@@ -124,38 +123,19 @@ const ImgxHook = ({
     return newUrlStr || '';
   };
 
-  const loadedImg = async (): Promise<JSX.Element> => {
-    if (!isVisible) {
-      return (
-        <img
-          ref={setRef}
-          alt={alt || ''}
-          className={className || ''}
-          style={
-            className
-              ? undefined
-              : {
-                  width: '100%',
-                  height: '100%',
-                }
-          }
-          {...imgAttributes}
-        />
-      );
-    }
-
-    const iswebp = await checkWebpFeature();
-    const newUrlStr = getImgGzip({ src, width: imgHitWidth, quality, iswebp });
-
+  const loadedImg = useCallback((): JSX.Element => {
     return (
       <img
-        ref={setRef}
+        ref={(el) => {
+          setRef(el);
+          imgRef.current = el;
+        }}
         onLoad={onLoad}
-        src={newUrlStr}
-        onError={(e: any) => {
+        // src={imgUrl}
+        {...imgAttributes}
+        onError={() => {
           if (errorImgUrl) {
-            e.target.onerror = null;
-            e.target.src = `${errorImgUrl}`;
+            setImgUrl(errorImgUrl);
           }
         }}
         alt={alt || ''}
@@ -170,7 +150,7 @@ const ImgxHook = ({
         }
       />
     );
-  };
+  }, [onLoad, imgAttributes, className]);
 
   return (
     <div
@@ -183,7 +163,7 @@ const ImgxHook = ({
       }}
       onClick={onClick}
     >
-      {imgLazyedDom}
+      {loadedImg()}
       <div
         style={{
           width: '100%',

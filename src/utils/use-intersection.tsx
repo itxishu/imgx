@@ -15,11 +15,7 @@ const hasIntersectionObserver = typeof IntersectionObserver !== 'undefined';
 export function useIntersection<T extends Element>({
   rootMargin,
   disabled,
-}: UseIntersection): [
-  (element: T | null) => void,
-  boolean,
-  React.MutableRefObject<Function | undefined>,
-] {
+}: UseIntersection): [(element: T | null) => void, boolean] {
   const isDisabled: boolean = disabled || !hasIntersectionObserver;
 
   const unobserve = useRef<Function>();
@@ -51,7 +47,7 @@ export function useIntersection<T extends Element>({
     }
   }, [visible]);
 
-  return [setRef, visible, unobserve];
+  return [setRef, visible];
 }
 
 function observe(

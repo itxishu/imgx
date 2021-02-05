@@ -16,6 +16,7 @@ const App = () => {
       <div style={{ width: 500 }}>
         <Imgx
           src="https://img.kaikeba.com/platform/247103210202xrti2.jpg"
+          errorImgUrl="https://img.kaikeba.com/platform/417172110202qgxr.jpg" // 图片加载失败后，显示的图片
           wrapperClassName={styles.boxWrap} // 外层样式，必须定义宽高，这样才有动画渐变效果
           className={styles.boxWrap} // img标签样式
           delayTime={2.3} // 动画持续时间
@@ -25,7 +26,6 @@ const App = () => {
           onClick={(e) => {
             console.log('点击', e);
           }} // 点击事件
-          // layout="fill"
           // width={400}
           // height={400}
           // imgHitWidth={600}
