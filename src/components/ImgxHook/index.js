@@ -6,7 +6,7 @@ const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
 
 const imglazyLoadInit = {
-  filter: 'blur(20px)',
+  filter: 'blur(8px)',
   opacity: 1,
 };
 const imglazyLoadLoaded = {
@@ -83,7 +83,7 @@ const ImgxHook = ({
     blurTimer.current = setTimeout(() => {
       setBlurLayoutCss({
         zIndex: -1,
-        display: 'none',
+        // display: 'none',
       });
     }, time * 1000);
   };
@@ -96,7 +96,7 @@ const ImgxHook = ({
     }
     // 占位低清晰图支持类型
     const newImgType = {
-      qiniu: `${curSrc}?imageMogr2/thumbnail/100x100/blur/3x5`,
+      qiniu: `${curSrc}?imageMogr2/thumbnail/100x`,
       oss: '',
       custom: placeholderSrc, // 用户自定义
     };
@@ -113,27 +113,10 @@ const ImgxHook = ({
     return newUrlStr || '';
   };
 
-  const addImgUrlWebp = (url, fixUrl = '') => {
-    let newUrlStr = url;
-    const isUrlFormat = /\/(format)\/(.*)/g.test(newUrlStr);
-    // 转换格式容错处理
-    if (!isUrlFormat) {
-      const tailFixStr = /\/$/g.test(newUrlStr) ? '' : '/';
-      newUrlStr += `${fixUrl}${tailFixStr}format/webp`;
-    }
-    return newUrlStr;
-  };
-
   const loadedImg = async () => {
     const iswebp = await checkWebpFeature();
     const newUrlStr = getImgGzip({ src, width: imgHitWidth, quality, iswebp });
 
-    // 兼容webp格式
-    // if (/\?(imageView2|imageMogr2)\//.test(newUrlStr) && iswebp) {
-    //   newUrlStr = addImgUrlWebp(newUrlStr);
-    // } else if (iswebp) {
-    //   newUrlStr = addImgUrlWebp(newUrlStr, '?imageMogr2');
-    // }
     return (
       <img
         ref={imgRef}
@@ -166,6 +149,7 @@ const ImgxHook = ({
         height,
         width,
         position: 'relative',
+        overflow: 'hidden',
       }}
       onClick={onClick}
     >
