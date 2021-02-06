@@ -1,6 +1,6 @@
 {
   "name": "@kkb/imgx",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "imgx渐进式图片加载组件，支持react服务端渲染SSR",
   "publishConfig": {
     "registry": "https://registry-npm.kaikeba.com/"

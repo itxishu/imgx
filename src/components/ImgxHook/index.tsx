@@ -54,25 +54,26 @@ const ImgxHook = ({
     disabled: !isLazy,
   });
   const isVisible = !isLazy || isIntersected;
-  const imgAttributes: GenImgAttrsResult = {
-    src: isVisible
-      ? imgUrl
-      : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-    srcSet: undefined,
-    sizes: undefined,
-  };
 
   useEffect(() => {
     handleImgUrl();
     return () => {
       blurTimer.current = null;
     };
-  }, []);
+  }, [src, isVisible]);
 
   const handleImgUrl = async () => {
     const iswebp = await checkWebpFeature();
     const newUrlStr = getImgGzip({ src, width: imgHitWidth, quality, iswebp });
     setImgUrl(newUrlStr);
+  };
+
+  const imgAttributes: GenImgAttrsResult = {
+    src: isVisible
+      ? imgUrl
+      : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+    srcSet: undefined,
+    sizes: undefined,
   };
 
   // 图片加载完
