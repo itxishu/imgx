@@ -47,9 +47,10 @@ const DemoPage = ({ images }) => (
 |  src   |  String   |     |  图片地址   |
 |   imgHitWidth  |   number  |     |  图片压缩宽度，等比压缩图片，无需设置压缩高度   |
 |  delayTime   |   number  |  1   |   过渡动画持续时间，单位秒  |
-|  imageLoadType   |   String  |  qiniu   |  低清图类型，可开启自定义模式，配合placeholderSrc使用   |
-|  placeholderSrc   |   String  |     |   低清图url地址  |
 |  beforeLoad   | Function    |     |  img加载后回调   |
 |  onClick   | Function    |     | imx点击事件    |
 |  errorImgUrl  |  String   |     |  图片加载失败后，显示的图片   |
+|  loading   |   "lazy" 、 "eager"  |   lazy  |  图片加载模式，lazy懒加载，eager同步加载   |
+|  offset   |   String  |  200px   |  懒加载偏移量，默认可视区外200px内就开始加载图片   |
+|  quality   |  number   |  85   |  图片压缩质量，0-100区间   |
 <!-- |     |     |     |     | -->

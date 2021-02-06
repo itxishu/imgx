@@ -35,9 +35,9 @@ const ImgxHook = ({
   errorImgUrl, // 图片加载失败后，显示的图片
   alt,
   imgHitWidth, // 图片压缩宽度
-  quality = 75, // 压缩质量
-  loading,
-  offset = '100px', // 图片懒加载偏移距离，默认可视区外100px内就开始加载图片
+  quality = 85, // 压缩质量
+  loading = 'lazy',
+  offset = '200px', // 图片懒加载偏移距离，默认可视区外200px内就开始加载图片
 }: ImgxHookProps) => {
   const blurTimer = useRef<any>(null);
   const [blurLayoutCss, setBlurLayoutCss] = useState({
