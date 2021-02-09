@@ -21,6 +21,8 @@ const imglazyLoadLoaded = {
   animationFillMode: 'both',
 };
 
+let iswebp: boolean = false;
+
 const ImgxHook = ({
   src = '', // 图片url
   delayTime = 0.6, // 动画持续时间
@@ -46,7 +48,7 @@ const ImgxHook = ({
   const [loadedClassName, setLoadedClassName] = useState<LoadedClassNameData>(
     imglazyLoadInit,
   );
-  const [imgUrl, setImgUrl] = useState(''); // 图片加载完url
+  const [imgUrl, setImgUrl] = useState(src); // 图片加载完url
   const imgRef = useRef<HTMLImageElement | null>(null);
   const isLazy = loading === 'lazy' || typeof loading === 'undefined';
   const [setRef, isIntersected] = useIntersection({
@@ -60,10 +62,10 @@ const ImgxHook = ({
     return () => {
       blurTimer.current = null;
     };
-  }, [src, isVisible]);
+  }, [src]);
 
   const handleImgUrl = async () => {
-    const iswebp = await checkWebpFeature();
+    iswebp = await checkWebpFeature();
     const newUrlStr = getImgGzip({ src, width: imgHitWidth, quality, iswebp });
     setImgUrl(newUrlStr);
   };
