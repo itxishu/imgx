@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { checkWebpFeature, getImgGzip } from '../../utils';
 import { useIntersection } from '../../utils/use-intersection';
 import {
@@ -118,7 +118,7 @@ const ImgxHook = ({
     return newUrlStr || '';
   };
 
-  const loadedImg = useCallback((): JSX.Element => {
+  const loadedImg = (): JSX.Element => {
     return (
       <img
         ref={(el) => {
@@ -145,7 +145,7 @@ const ImgxHook = ({
         }
       />
     );
-  }, [onLoad, imgAttributes, className]);
+  };
 
   return (
     <div
