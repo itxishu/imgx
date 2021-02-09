@@ -77,7 +77,7 @@ const ImgxHook = ({
   };
 
   // 图片加载完
-  const onLoad = useCallback(() => {
+  const onLoad = () => {
     const time = delayTime ?? 0.6;
     setLoadedClassName({
       transitionDuration: `${time}s`,
@@ -92,7 +92,7 @@ const ImgxHook = ({
         // display: 'none',
       });
     }, time * 1000);
-  }, [src]);
+  };
 
   // 占位符图片url
   const handlePlaceholderSrc = () => {
