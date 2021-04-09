@@ -1,6 +1,6 @@
 {
   "name": "@kkb/imgx",
-  "version": "4.0.5",
+  "version": "4.1.0",
   "description": "imgx渐进式图片加载组件，支持react服务端渲染SSR",
   "publishConfig": {
     "registry": "https://registry-npm.kaikeba.com/"
@@ -96,6 +96,8 @@
     "postcss-loader": "4.2.0",
     "postcss-normalize": "9.0.0",
     "postcss-preset-env": "6.7.0",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
     "regenerator-runtime": "0.13.3",
     "rimraf": "3.0.2",
     "terser-webpack-plugin": "5.1.1",
@@ -110,7 +112,6 @@
     "webpackbar": "5.0.0-3"
   },
   "dependencies": {
-    "react": "17.0.1",
-    "react-dom": "17.0.1"
+
   }
 }
