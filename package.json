@@ -1,6 +1,6 @@
 {
   "name": "@kkb/imgx",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "imgx渐进式图片加载组件，支持react服务端渲染SSR",
   "publishConfig": {
     "registry": "https://registry-npm.kaikeba.com/"
@@ -14,7 +14,7 @@
     "build:prod": "cross-env BUILD_ENV=prod webpack",
     "build:win": "cross-env BUILD_ENV=win webpack",
     "build:ana": "cross-env ANA_TYPE=true BUILD_ENV=prod webpack",
-    "prepublish": "npm run build:prod",
+    "prepublishOnly": "npm run build:prod",
     "tags": "git tag v0.0.1 && git push origin --tags"
   },
   "main": "./build/index.js",

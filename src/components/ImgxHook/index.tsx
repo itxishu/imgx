@@ -41,7 +41,6 @@ const ImgxHook = ({
   loading = 'lazy',
   offset = '200px', // 图片懒加载偏移距离，默认可视区外200px内就开始加载图片
 }: ImgxHookProps) => {
-  const blurTimer = useRef<any>(null);
   const [blurLayoutCss, setBlurLayoutCss] = useState({
     zIndex: 1,
   });
@@ -49,7 +48,7 @@ const ImgxHook = ({
     imglazyLoadInit,
   );
   const [imgUrl, setImgUrl] = useState(src); // 图片加载完url
-  const imgRef = useRef<HTMLImageElement | null>(null);
+  const imgRef = useRef<any>(null);
   const isLazy = loading === 'lazy' || typeof loading === 'undefined';
   const [setRef, isIntersected] = useIntersection({
     rootMargin: offset,
@@ -59,9 +58,7 @@ const ImgxHook = ({
 
   useEffect(() => {
     handleImgUrl();
-    return () => {
-      blurTimer.current = null;
-    };
+    return () => {};
   }, [src]);
 
   const handleImgUrl = async () => {
@@ -88,7 +85,7 @@ const ImgxHook = ({
     beforeLoad?.(imgRef?.current); // 回调
 
     // 动效remove
-    blurTimer.current = setTimeout(() => {
+    setTimeout(() => {
       setBlurLayoutCss({
         zIndex: -1,
         // display: 'none',
@@ -123,7 +120,7 @@ const ImgxHook = ({
   const loadedImg = (): JSX.Element => {
     return (
       <img
-        ref={(el) => {
+        ref={(el: Element | null) => {
           setRef(el);
           imgRef.current = el;
         }}
