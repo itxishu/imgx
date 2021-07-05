@@ -28,10 +28,10 @@
     "email": "zzq8297729@163.com",
     "url": "https://www.jonhuu.com"
   },
-  "homepage": "https://www.jonhuu.com/",
+  "homepage": "https://github.com/rdmix/imgx",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tec8297729/npmBase"
+    "url": "https://github.com/rdmix/imgx"
   },
   "files": [
     "build"
