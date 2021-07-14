@@ -72,7 +72,7 @@ interface ImgGzipData {
 export const getImgGzip = ({
   src,
   width,
-  quality = 75,
+  quality = 85,
   iswebp,
 }: ImgGzipData): string => {
   let newUrl = src;

@@ -44,9 +44,8 @@ const ImgxHook = ({
   const [blurLayoutCss, setBlurLayoutCss] = useState({
     zIndex: 1,
   });
-  const [loadedClassName, setLoadedClassName] = useState<LoadedClassNameData>(
-    imglazyLoadInit,
-  );
+  const [loadedClassName, setLoadedClassName] =
+    useState<LoadedClassNameData>(imglazyLoadInit);
   const [imgUrl, setImgUrl] = useState(src); // 图片加载完url
   const imgRef = useRef<any>(null);
   const isLazy = loading === 'lazy' || typeof loading === 'undefined';
@@ -125,7 +124,6 @@ const ImgxHook = ({
           imgRef.current = el;
         }}
         onLoad={onLoad}
-        // src={imgUrl}
         {...imgAttributes}
         onError={() => {
           if (errorImgUrl) {
@@ -157,7 +155,7 @@ const ImgxHook = ({
       }}
       onClick={onClick}
     >
-      {loadedImg()}
+      {typeof window !== 'undefined' ? loadedImg() : null}
       <div
         style={{
           width: '100%',
