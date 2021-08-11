@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { checkWebpFeature, getImgGzip } from '../../utils';
+import { useSafaState } from '../../utils/use-safeState';
 import { useIntersection } from '../../utils/use-intersection';
 import {
   ImgxHookProps,
@@ -41,13 +42,14 @@ const ImgxHook = ({
   loading = 'lazy',
   offset = '200px', // 图片懒加载偏移距离，默认可视区外200px内就开始加载图片
 }: ImgxHookProps) => {
-  const [blurLayoutCss, setBlurLayoutCss] = useState({
+  const [blurLayoutCss, setBlurLayoutCss] = useSafaState({
     zIndex: 1,
   });
   const [loadedClassName, setLoadedClassName] =
     useState<LoadedClassNameData>(imglazyLoadInit);
   const [imgUrl, setImgUrl] = useState(src); // 图片加载完url
   const imgRef = useRef<any>(null);
+  const timeFn = useRef<any>(null);
   const isLazy = loading === 'lazy' || typeof loading === 'undefined';
   const [setRef, isIntersected] = useIntersection({
     rootMargin: offset,
@@ -57,7 +59,9 @@ const ImgxHook = ({
 
   useEffect(() => {
     handleImgUrl();
-    return () => {};
+    return () => {
+      clearTimeout(timeFn.current);
+    };
   }, [src]);
 
   const handleImgUrl = async () => {
@@ -84,7 +88,7 @@ const ImgxHook = ({
     beforeLoad?.(imgRef?.current); // 回调
 
     // 动效remove
-    setTimeout(() => {
+    timeFn.current = setTimeout(() => {
       setBlurLayoutCss({
         zIndex: -1,
         // display: 'none',
