@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { checkWebpFeature, getImgGzip } from '../../utils';
 import { useSafaState } from '../../utils/use-safeState';
 import { useIntersection } from '../../utils/use-intersection';
@@ -46,8 +46,8 @@ const ImgxHook = ({
     zIndex: 1,
   });
   const [loadedClassName, setLoadedClassName] =
-    useState<LoadedClassNameData>(imglazyLoadInit);
-  const [imgUrl, setImgUrl] = useState(src); // 图片加载完url
+    useSafaState<LoadedClassNameData>(imglazyLoadInit);
+  const [imgUrl, setImgUrl] = useSafaState(src); // 图片加载完url
   const imgRef = useRef<any>(null);
   const timeFn = useRef<any>(null);
   const isLazy = loading === 'lazy' || typeof loading === 'undefined';

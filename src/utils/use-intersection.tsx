@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import requestIdleCallback from './request-idle-callback';
+import { useSafaState } from './use-safeState';
 
 type UseIntersectionObserverInit = Pick<IntersectionObserverInit, 'rootMargin'>;
 type UseIntersection = { disabled?: boolean } & UseIntersectionObserverInit;
@@ -19,7 +20,7 @@ export function useIntersection<T extends Element>({
   const isDisabled: boolean = disabled || !hasIntersectionObserver;
 
   const unobserve = useRef<Function>();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useSafaState(false);
 
   const setRef = useCallback(
     (el: T | null) => {
