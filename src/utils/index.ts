@@ -89,3 +89,4 @@ export const getImgGzip = ({
 
   return newUrl;
 };
+
