@@ -10,6 +10,9 @@ import {
 
 const pattern = new RegExp('http(s)?://[^s]*');
 const defaultImg = 'https://img.kaikeba.com/22857172219102bybu.jpeg';
+// img空 占位符
+const imgEmptySrc =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 const imglazyLoadInit: LoadedClassNameData = {
   filter: 'blur(8px)',
@@ -71,9 +74,7 @@ const ImgxHook = ({
   };
 
   const imgAttributes: GenImgAttrsResult = {
-    src: isVisible
-      ? imgUrl
-      : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+    src: isVisible ? imgUrl : imgEmptySrc,
     srcSet: undefined,
     sizes: undefined,
   };
@@ -127,7 +128,7 @@ const ImgxHook = ({
           setRef(el);
           imgRef.current = el;
         }}
-        onLoad={onLoad}
+        onLoad={isVisible ? onLoad : undefined}
         {...imgAttributes}
         onError={() => {
           if (errorImgUrl) {
