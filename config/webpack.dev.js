@@ -11,8 +11,6 @@ module.exports = function (config) {
       filename: '[name].js',
     },
     devServer: {
-      contentBase: paths.appSrc,
-      disableHostCheck: true,
       historyApiFallback: true,
       compress: true,
       open: true,
