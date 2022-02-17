@@ -1,6 +1,6 @@
 {
   "name": "@kkb/imgx",
-  "version": "4.3.0",
+  "version": "4.3.0-beta2",
   "description": "imgx渐进式图片加载组件，支持react服务端渲染SSR",
   "scripts": {
     "start": "npm run dev",
@@ -12,6 +12,8 @@
     "build:win": "cross-env BUILD_ENV=win webpack",
     "build:ana": "cross-env ANA_TYPE=true BUILD_ENV=prod webpack",
     "prepublishOnly": "npm run build:prod",
+    "pub:beta": "npm publish --dist-tag beta",
+    "pub:prod": "npm publish --dist-tag latest",
     "tags": "git tag v0.0.1 && git push origin --tags"
   },
   "main": "./build/index.js",
@@ -40,6 +42,9 @@
       "eslint src/ --fix",
       "git add"
     ]
+  },
+  "resolutions": {
+    "sanitize.css": "12.0.1"
   },
   "peerDependencies": {
     "react": ">=17.0.0",

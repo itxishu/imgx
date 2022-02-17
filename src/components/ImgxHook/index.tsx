@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { checkWebpFeature, getImgGzip } from '../../utils';
+import { checkWebpFeature, getImgGzip, getOssImgGzip, getParseUrl, getQiniuImgGzip } from '../../utils';
 import { useSafaState } from '../../utils/use-safeState';
 import { useIntersection } from '../../utils/use-intersection';
 import {
@@ -25,32 +25,39 @@ const imglazyLoadLoaded = {
   animationFillMode: 'both',
 };
 
-let iswebp: boolean = false;
+let isWebp: boolean = false;
 
 const ImgxHook = ({
-  src = '', // 图片url
-  delayTime = 0.6, // 动画持续时间
-  imageLoadType = 'qiniu', // 低清晰图类型，默认qiniu七牛
-  placeholderSrc = '', // 自定义低清晰url
+  src = '',
+  delayTime = 0.6,
+  imageLoadType = 'qiniu',
+  placeholderSrc = '',
   className,
   wrapperClassName,
   height,
   width,
-  beforeLoad, // 加载后回调
-  onClick, // 点击事件
-  errorImgUrl, // 图片加载失败后，显示的图片
+  beforeLoad,
+  onClick,
+  errorImgUrl,
   alt,
   imgHitWidth, // 图片压缩宽度
-  quality = 85, // 压缩质量
+  imgHitHeight,
+  crop,
+  quality = 85,
   loading = 'lazy',
-  offset = '200px', // 图片懒加载偏移距离，默认可视区外200px内就开始加载图片
+  offset = '200px',
+  placeholderMode = 'eager',
+  domain = {
+    qiniu: ['img.kaikeba.com'],
+    oss: ['image-demo.oss-cn-hangzhou.aliyuncs.com'],
+  }
 }: ImgxHookProps) => {
   const [blurLayoutCss, setBlurLayoutCss] = useSafaState({
     zIndex: 1,
   });
   const [loadedClassName, setLoadedClassName] =
     useSafaState<LoadedClassNameData>(imglazyLoadInit);
-  const [imgUrl, setImgUrl] = useSafaState(src); // 图片加载完url
+  const [imgUrl, setImgUrl] = useSafaState(''); // 图片加载完url
   const imgRef = useRef<any>(null);
   const timeFn = useRef<any>(null);
   const isLazy = loading === 'lazy' || typeof loading === 'undefined';
@@ -67,10 +74,38 @@ const ImgxHook = ({
     };
   }, [src]);
 
+  // 图片src链接处理
   const handleImgUrl = async () => {
-    iswebp = await checkWebpFeature();
-    const newUrlStr = getImgGzip({ src, width: imgHitWidth, quality, iswebp });
-    setImgUrl(newUrlStr);
+    isWebp = await checkWebpFeature();
+    const { qiniu, oss } = domain || {}
+    const urlObj = getParseUrl(src)
+    let newImgSrc = src
+    
+    // 七牛
+    if (qiniu?.includes(urlObj.host || '')) {
+      newImgSrc = getQiniuImgGzip({
+        src,
+        quality,
+        width: imgHitWidth,
+        height: imgHitHeight,
+        isWebp,
+        crop,
+      })
+    }
+
+    // oss阿里云
+    if (oss?.includes(urlObj.host || '')) {
+      newImgSrc = getOssImgGzip({
+        src,
+        quality,
+        width: imgHitWidth,
+        height: imgHitHeight,
+        isWebp,
+        crop,
+      })
+    }
+
+    setImgUrl(newImgSrc);
   };
 
   const imgAttributes: GenImgAttrsResult = {
@@ -97,20 +132,6 @@ const ImgxHook = ({
     }, time * 1000);
   };
 
-  // 占位符图片url
-  const handlePlaceholderSrc = () => {
-    let curSrc = src;
-    curSrc = pattern.test(src) ? fillerPlaceholderSrc(src) : defaultImg;
-
-    // 占位低清晰图支持类型
-    const newImgType = {
-      qiniu: `${curSrc}?imageMogr2/thumbnail/100x`,
-      oss: '',
-      custom: placeholderSrc, // 用户自定义
-    };
-    return newImgType[imageLoadType] || '';
-  };
-
   // 过滤缩略图参数
   const fillerPlaceholderSrc = (url: string) => {
     let newUrlStr = url;
@@ -118,9 +139,31 @@ const ImgxHook = ({
       const reg = newUrlStr.match(/(?<u>.*)\?.*/);
       newUrlStr = reg?.groups?.u || newUrlStr;
     }
+
+    if(/\?(x-oss-process=image)\//.test(newUrlStr)){
+      const reg = newUrlStr.match(/(?<u>.*)\?.*/);
+      newUrlStr = reg?.groups?.u || newUrlStr;
+    }
     return newUrlStr || '';
   };
 
+  // 占位符图片url
+  const handlePlaceholderSrc = () => {
+    // 懒加载模式
+    if(!isVisible && placeholderMode !== 'eager') return ''
+
+    let curSrc = src;
+    curSrc = pattern.test(src) ? fillerPlaceholderSrc(src) : defaultImg;
+
+    // 占位低清晰图支持类型
+    const newImgType = {
+      qiniu: `${curSrc}?imageMogr2/thumbnail/100x`,
+      oss: `${curSrc}?x-oss-process=image/interlace,1/resize,l_100`,
+      custom: placeholderSrc, // 用户自定义
+    };
+    return newImgType[imageLoadType] || '';
+  };
+  
   const loadedImg = (): JSX.Element => {
     return (
       <img
@@ -168,6 +211,7 @@ const ImgxHook = ({
           position: 'absolute',
           left: 0,
           top: 0,
+          overflow: 'hidden',
           backgroundColor: 'transparent',
           ...loadedClassName,
           ...blurLayoutCss,
@@ -177,7 +221,7 @@ const ImgxHook = ({
           src={handlePlaceholderSrc()}
           style={{
             width: '100%',
-            height: '100%',
+            // height: '100%',
           }}
           alt={alt || ''}
         />

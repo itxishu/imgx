@@ -141,6 +141,8 @@ module.exports = {
     'no-self-assign': 'warn',
     'no-self-compare': 'warn',
     'func-names': 0,
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": 0
   },
   settings: {
     // support import modules from TypeScript files in JavaScript files
